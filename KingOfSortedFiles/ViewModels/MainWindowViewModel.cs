@@ -1,8 +1,10 @@
-﻿namespace KingOfSortedFiles.ViewModels;
+﻿using Avalonia.Media;
+
+namespace KingOfSortedFiles.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-#pragma warning disable CA1822 // Mark members as static
-    public string Greeting => "Welcome to Avalonia!";
-#pragma warning restore CA1822 // Mark members as static
+    public IBrush ButtonColor => new SolidColorBrush(Color.Parse("#323233"));
+    public IBrush ListBoxColor => new SolidColorBrush(Color.Parse("#2a2a2b"));
+
 }

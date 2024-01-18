@@ -7,14 +7,110 @@
         x:Class="KingOfSortedFiles.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="KingOfSortedFiles">
+        Title="KingOfSortedFiles"
+        Background="Black">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="140*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="90*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="90*"/>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="43*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="177*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="176*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <ListBox Grid.Row="3" Margin="0,0,0,10" Grid.RowSpan="2" Grid.Column="1" Background="{Binding ListBoxColor}"/>
+        
+        <ListBox Grid.Row="5" Grid.Column="1" Background="{Binding ListBoxColor}">
+            <StackPanel>
+                <TextBlock Text="Search by"></TextBlock>
+                <StackPanel>
+                    <CheckBox>File extension</CheckBox>
+                    <CheckBox>Search Tags</CheckBox>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="Sorted By Parameter one"></TextBlock>
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <CheckBox>Created</CheckBox>
+                    <CheckBox>changed</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <CheckBox>Last updated</CheckBox>
+                    <CheckBox>File extension</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <CheckBox>Search Tag</CheckBox>
+                </StackPanel>
+                <TextBlock Text="_____________________"></TextBlock>
+                <TextBlock Text="Parameter Two"></TextBlock>
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <CheckBox>Created</CheckBox>
+                    <CheckBox>changed</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <CheckBox>Last updated</CheckBox>
+                    <CheckBox>File extension</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <CheckBox>Search Tag</CheckBox>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Spacing="5">
+                <TextBlock Text="Search Tag"></TextBlock>
+                <TextBox Text="Add new Search Tag"></TextBox>
+                <Button Content="Add" Background="{Binding ButtonColor}"></Button>
+                <ListBox Background="{Binding ListBoxColor}"></ListBox>
+            </StackPanel>
+        </ListBox>
+        
+        <ListBox Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,0,0,10" Grid.RowSpan="2" Background="{Binding ListBoxColor}"/>
+        
+        <ListBox Grid.Column="7" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,0,0,10" Grid.RowSpan="2" Background="{Binding ListBoxColor}"/>
+        
+        <ListBox Grid.Column="3" Grid.Row="5"  Grid.ColumnSpan="7" Background="{Binding ListBoxColor}">
+            
+        </ListBox>
+        
+        <StackPanel Grid.Row="1" Margin="0,0,0,10" Grid.RowSpan="2" Grid.Column="1">
+            <Button Content="New">
+                <ToolTip.Tip>
+                    <TextBlock Text="adds new file extension" Background="{Binding ButtonColor}"></TextBlock>
+                </ToolTip.Tip>
+            </Button>
+        </StackPanel>
+        
+        <StackPanel Grid.Column="5" Grid.Row="1" Margin="0,0,0,10" Grid.RowSpan="2">
+            <TextBox x:Name="SourceSearchBox" Text="Search"></TextBox>
+        </StackPanel>
+        
+        <StackPanel Grid.Column="3" Grid.Row="1" Margin="0,0,0,10" Grid.RowSpan="2">
+            <TextBox x:Name="SourcePathBox"></TextBox>
+        </StackPanel>
+        
+        <StackPanel Grid.Column="7" Grid.Row="1">
+            <TextBox x:Name="TargetPathSearchBox"></TextBox>
+        </StackPanel>
+        
+        <StackPanel Grid.Column="9" Grid.Row="1">
+            <TextBox x:Name="TargetSearchBox" Text="Search" ></TextBox>
+        </StackPanel>
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+    </Grid>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
 </Window>
