@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using KingOfSortedFiles.UiElements;
 using KingOfSortedFiles.Views;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,10 @@ public class ProgramStartRoutine
         ReadJsonSettings();
         LoadFileExtensionsInListBox();
         ReadStartPathFilesAndDirectory();
+        
+        CustomLogSystem
+            .BindListBox(mainWindow.Find<ListBox>("LogListBox"))
+            .BindLogFile(Path.Combine(Directory.GetCurrentDirectory(),"Log.txt"));
     }
 
     private void ReadJsonSettings()

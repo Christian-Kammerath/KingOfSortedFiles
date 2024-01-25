@@ -1,22 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=21e2c602_002D35a8_002D45ed_002Db382_002Dedf9bc744bd5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Simulate_lsblk_Call_Returns_List_of_Drive" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;ProjectFile&gt;2083571A-1ACF-4720-9C39-3ED94EEA45CD/f:DriveInfoLinuxTest.cs&lt;/ProjectFile&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=94e4b49c_002D83cf_002D48fb_002D9a6a_002De4a6f4bc5c57/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;TestProject1&amp;gt; #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/home/chris/RiderProjects/KingOfSortedFiles/TestProject1" Presentation="&amp;lt;TestProject1&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=42f34a94_002D0c6a_002D4f49_002Db63d_002D933b48d496ea/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from DriveInfoLinuxTest.cs #6" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;ProjectFile&gt;2083571A-1ACF-4720-9C39-3ED94EEA45CD/f:DriveInfoLinuxTest.cs&lt;/ProjectFile&gt;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=44631297_002Db8be_002D4523_002D9544_002Dc8b1fcbb529a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from DriveInfoLinuxTest.cs #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;ProjectFile&gt;2083571A-1ACF-4720-9C39-3ED94EEA45CD/f:DriveInfoLinuxTest.cs&lt;/ProjectFile&gt;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5a226f28_002Dc0e1_002D4cc3_002Da027_002Dea4dbd1d8d5b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from DriveInfoLinuxTest.cs #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;ProjectFile&gt;2083571A-1ACF-4720-9C39-3ED94EEA45CD/f:DriveInfoLinuxTest.cs&lt;/ProjectFile&gt;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5ce5a5c5_002D60e6_002D41fe_002D90b3_002Dbcb1485fe0b2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from DriveInfoLinuxTest.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;ProjectFile&gt;2083571A-1ACF-4720-9C39-3ED94EEA45CD/f:DriveInfoLinuxTest.cs&lt;/ProjectFile&gt;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a67824e9_002D8d22_002D480a_002Da45c_002D1b01f573815b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from DriveInfoLinuxTest.cs #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;ProjectFile&gt;2083571A-1ACF-4720-9C39-3ED94EEA45CD/f:DriveInfoLinuxTest.cs&lt;/ProjectFile&gt;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=edec125b_002D8d6b_002D4a20_002D816a_002D8054e5290805/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from DriveInfoLinuxTest.cs #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;ProjectFile&gt;2083571A-1ACF-4720-9C39-3ED94EEA45CD/f:DriveInfoLinuxTest.cs&lt;/ProjectFile&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c3e425d0_002Df5ce_002D4fc7_002D8560_002De2916056df60/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;TestProject1&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/home/chris/RiderProjects/KingOfSortedFiles/TestProject1" Presentation="&amp;lt;TestProject1&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

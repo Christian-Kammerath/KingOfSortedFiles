@@ -7,7 +7,8 @@ public class DriveInfoLinuxTest
     [Fact]
     public void Simulate_lsblk_Call_Returns_List_of_Drive()
     {
-        string allMounted = @"NAME              SIZE FSTYPE      MOUNTPOINT
+        //Arrange
+        var allMounted = @"NAME              SIZE FSTYPE      MOUNTPOINT
                                 loop0               0B             
                                 loop1               0B             
                                 loop2               0B             
@@ -47,29 +48,23 @@ public class DriveInfoLinuxTest
         };
 
         
-
+        //Act
         var result = allMounted.StringManipulator().CreateDriveList();
 
-        
-        Assert.True(IsListIdentical(expectedList,result),"Die Listen sind nicht identisch.");
+        //Assert
+        Assert.True(IsListIdentical(expectedList,result),
+            "The lists are not identical.");
         
     }
 
     private bool IsListIdentical(List<Drive> listOne, List<Drive> listTwo)
     {
-        for (int i = 0; i < listOne.Count; i++)
-        {
-            if(listOne.Count != listTwo.Count || listOne[i].MountPoint != listTwo[i].MountPoint ||
-                    listOne[i].Name != listTwo[i].Name ||
-                    listOne[i].FsType != listTwo[i].FsType ||
-                    listOne[i].Size != listTwo[i].Size)
-            {
-                    return false;
-            }
-            
-        }
-
-        return true;
+        return !listOne.Where((t, i) =>
+            listOne.Count != listTwo.Count ||
+            t.MountPoint != listTwo[i].MountPoint ||
+            t.Name != listTwo[i].Name ||
+            t.FsType != listTwo[i].FsType ||
+            t.Size != listTwo[i].Size).Any();
     }
 
 }
