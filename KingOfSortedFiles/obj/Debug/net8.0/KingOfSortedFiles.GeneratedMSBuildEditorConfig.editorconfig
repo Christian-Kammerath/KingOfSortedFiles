@@ -20,5 +20,8 @@ build_property.EnableGeneratedComInterfaceComImportInterop =
 [/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/Styles1.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
