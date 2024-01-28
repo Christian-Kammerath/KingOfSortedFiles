@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "y7lFOv/jKt4luTvbQAyXz61/yRLMjXyxIpc5EtXPYgm0EUMbccuqxYt2fOQqR4wYzo3jfwiSpL9Lq47EYaylVw==",
+  "dgSpecHash": "I3vNsJ4t1cPwqpVjvIKkJOkI6jHrg34wGj0QTZlQ44iXDEE7pjUzCiabau13LPg3zhkfHOXgr5onP7sATNjiPA==",
   "success": true,
-  "projectFilePath": "/home/chris/RiderProjects/KingOfSortedFiles/TestProject1/TestProject1.csproj",
+  "projectFilePath": "/home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/xUnitTests.csproj",
   "expectedPackageFiles": [
     "/home/chris/.nuget/packages/avalonia/11.0.6/avalonia.11.0.6.nupkg.sha512",
     "/home/chris/.nuget/packages/avalonia.angle.windows.natives/2.1.0.2023020321/avalonia.angle.windows.natives.2.1.0.2023020321.nupkg.sha512",

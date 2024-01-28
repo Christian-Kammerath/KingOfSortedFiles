@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using KingOfSortedFiles.UiElements;
 using KingOfSortedFiles.Views;
@@ -19,7 +18,8 @@ public class ProgramStartRoutine
         UiElementsBinding.BindUiElements(mainWindow);
         ReadJsonSettings();
         LoadFileExtensionsInListBox();
-        ReadStartPathFilesAndDirectory();
+        ReadStartPathFilesAndDirectory(Settings.SourceStartPath,UiElementsBinding.SourceListBox!);
+        ReadStartPathFilesAndDirectory(Settings.TargetStartPath,UiElementsBinding.TargetListBox!);
         
         CustomLogSystem
             .BindListBox(mainWindow.Find<ListBox>("LogListBox"))
@@ -60,9 +60,9 @@ public class ProgramStartRoutine
         
     }
 
-    private async Task ReadStartPathFilesAndDirectory()
-    {
-        if (string.IsNullOrEmpty(Settings.StartPath))
+    private void ReadStartPathFilesAndDirectory(string startPath, ListBox lisBoxTooLoaded)
+    {   
+        if (string.IsNullOrEmpty(startPath))
         {
 
             var isLinux =  RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
@@ -87,9 +87,10 @@ public class ProgramStartRoutine
             
             foreach (var item in driverList)
             {
-                UiElementsBinding.SourceListBox!.Items.Add(new DriverTab(item));
+               lisBoxTooLoaded.Items.Add(new DriverTab(item));
             }
         }
+        
     }
     
 }

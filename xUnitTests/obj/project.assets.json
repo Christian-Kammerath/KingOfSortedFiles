@@ -8932,11 +8932,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/chris/RiderProjects/KingOfSortedFiles/TestProject1/TestProject1.csproj",
-      "projectName": "TestProject1",
-      "projectPath": "/home/chris/RiderProjects/KingOfSortedFiles/TestProject1/TestProject1.csproj",
+      "projectUniqueName": "/home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/xUnitTests.csproj",
+      "projectName": "xUnitTests",
+      "projectPath": "/home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/xUnitTests.csproj",
       "packagesPath": "/home/chris/.nuget/packages/",
-      "outputPath": "/home/chris/RiderProjects/KingOfSortedFiles/TestProject1/obj/",
+      "outputPath": "/home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/chris/.nuget/NuGet/NuGet.Config"

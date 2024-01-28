@@ -51,7 +51,7 @@ public class CustomLogSystemTest
         using StreamReader streamReader = new StreamReader(logFilePath);
         var logFileText = streamReader.ReadToEnd();
 
-        foreach (var sentence in combinedArrays)
+        foreach (var sentence in combinedArrays) 
         {
             Assert.Contains(sentence, logFileText);
         }

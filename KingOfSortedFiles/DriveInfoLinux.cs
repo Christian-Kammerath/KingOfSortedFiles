@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
+
 
 namespace KingOfSortedFiles;
 
@@ -21,9 +20,7 @@ public class Drive
 
 public static class DriveInfoLinux
 {
-    private  static readonly char[] Separator = ['\r', '\n'];
-    private static readonly char[] SeparatorArray = [' '];
-    private static bool IsMounted { get; set; }
+    
     private static readonly string[] Patterns = { "\u251C\u2500", "\u2514\u2500","\u2502" };
 
     
