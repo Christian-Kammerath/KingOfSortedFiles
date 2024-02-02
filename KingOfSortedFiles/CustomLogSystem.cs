@@ -102,43 +102,47 @@ public static class CustomLogSystem
         }
     }
     
-    public static void Error(string message)
+    public static void Error(string message,bool outputToListBox)
     {
-        LogSystemSettings
-            .LogListBox
-            .Items
-            .Add(new ErrorLogTab(message));
-        
+        if(outputToListBox)
+            LogSystemSettings
+                .LogListBox!
+                .Items
+                .Add(new ErrorLogTab(message));
+            
         WriteToLogFile(message,"Error");
         
     }
 
-    public static void Warning(string message)
+    public static void Warning(string message,bool outputToListBox)
     {
-        LogSystemSettings
-            .LogListBox
-            .Items
-            .Add(new WarningLogTab(message));
+        if(outputToListBox)
+            LogSystemSettings
+                .LogListBox!
+                .Items
+                .Add(new WarningLogTab(message));
         
         WriteToLogFile(message,"Warning");
     }
 
-    public static void Debug(string message)
+    public static void Debug(string message,bool outputToListBox)
     {
-        LogSystemSettings
-            .LogListBox
-            .Items
-            .Add(new DebugLogTab(message));
+        if(outputToListBox)
+            LogSystemSettings
+                .LogListBox!
+                .Items
+                .Add(new DebugLogTab(message));
         
-        WriteToLogFile(message,"Warning");
+        WriteToLogFile(message,"Debug");
     }
 
-    public static void Informational(string message)
+    public static void Informational(string message,bool outputToListBox)
     {
-        LogSystemSettings
-            .LogListBox
-            .Items
-            .Add(new InformationalLogTab(message));
+        if(outputToListBox)
+            LogSystemSettings
+                .LogListBox!
+                .Items
+                .Add(new InformationalLogTab(message));
         
         WriteToLogFile(message,"Informational");
     }

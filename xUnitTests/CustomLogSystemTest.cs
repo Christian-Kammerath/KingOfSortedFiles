@@ -31,17 +31,17 @@ public class CustomLogSystemTest
             .BindLogFile(logFileName);
         
         //Act
-        CustomLogSystem.Debug(debugCallArray[0]);
-        CustomLogSystem.Debug(debugCallArray[1]);
+        CustomLogSystem.Debug(debugCallArray[0],true);
+        CustomLogSystem.Debug(debugCallArray[1],true);
         
-        CustomLogSystem.Warning(warningCallArray[0]);
-        CustomLogSystem.Warning(warningCallArray[1]);
+        CustomLogSystem.Warning(warningCallArray[0],true);
+        CustomLogSystem.Warning(warningCallArray[1],true);
         
-        CustomLogSystem.Error(errorCallArray[0]);
-        CustomLogSystem.Error(errorCallArray[1]);
+        CustomLogSystem.Error(errorCallArray[0],true);
+        CustomLogSystem.Error(errorCallArray[1],true);
 
-        CustomLogSystem.Informational(informationalCallArray[0]);
-        CustomLogSystem.Informational(informationalCallArray[1]);
+        CustomLogSystem.Informational(informationalCallArray[0],true);
+        CustomLogSystem.Informational(informationalCallArray[1],true);
         
         //Assert
         var currentDirectoryFiles = Directory.GetFiles(Directory.GetCurrentDirectory()).ToList();

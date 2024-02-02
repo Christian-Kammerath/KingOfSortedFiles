@@ -25,3 +25,6 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/Views/SettingWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

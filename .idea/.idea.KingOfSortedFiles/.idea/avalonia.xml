@@ -5,6 +5,7 @@
       <map>
         <entry key="KingOfSortedFiles/Styles1.axaml" value="KingOfSortedFiles/KingOfSortedFiles.csproj" />
         <entry key="KingOfSortedFiles/Views/MainWindow.axaml" value="KingOfSortedFiles/KingOfSortedFiles.csproj" />
+        <entry key="KingOfSortedFiles/Views/SettingWindow.axaml" value="KingOfSortedFiles/KingOfSortedFiles.csproj" />
       </map>
     </option>
   </component>
