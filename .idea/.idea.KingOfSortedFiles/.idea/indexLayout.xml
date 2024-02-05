@@ -4,6 +4,7 @@
     <attachedFolders>
       <Path>KingOfSortedFiles/Assets</Path>
       <Path>KingOfSortedFiles/Assets/FileIcons</Path>
+      <Path>xUnitTests/TestDirectory</Path>
     </attachedFolders>
     <explicitIncludes />
     <explicitExcludes />

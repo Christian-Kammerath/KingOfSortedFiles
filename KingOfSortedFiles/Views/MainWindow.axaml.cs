@@ -78,7 +78,7 @@ public partial class MainWindow : Window
             if (selectedItem is TargetFolderTab targetFolderTab)
             {
                 var folderTab = (TargetFolderTab)selectedItem!;
-                SortingSettings.TargetDirectoryPath = Path.Combine(folderTab.FolderPath,folderTab.FolderName);
+                UiElementsBinding.SortingSettings.TargetDirectoryPath = Path.Combine(folderTab.FolderPath);
                 UiElementsBinding.LogListBox!.Items.Add(new SortingProcessTab());
             }
             
@@ -91,4 +91,6 @@ public partial class MainWindow : Window
     {
         OpensSettingsFile.OpenFile(Path.Combine(Directory.GetCurrentDirectory(),"appSettings.json"));
     }
+
+   
 }
