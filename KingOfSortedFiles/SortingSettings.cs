@@ -4,14 +4,48 @@ using KingOfSortedFiles.UiElements;
 
 namespace KingOfSortedFiles;
 
-public static class SortingSettings
+public  class SortingSettings
 {
-    public static SortCheckBoxes? SortCheckBoxes { get; set; }
-    public static SearchByCheckBoxes? SearchByCheckBoxes { get; set; } = new();
+    public  SortCheckBoxes? SortCheckBoxes { get; set; }
+    public  SearchByCheckBoxes? SearchByCheckBoxes { get; set; } = new();
 
-    public static List<string> SourceDirectoryPathList { get; set; } = new();
+    public  List<string> SourceDirectoryPathList { get; set; } = new();
 
-    public static string TargetDirectoryPath { get; set; } = null!;
+    public  string TargetDirectoryPath { get; set; } = null!;
+
+    public  List<string> FileExtensionList { get; set; } = new();
+    
+    public  MoveAndOrCopy MoveAndOrCopy { get; set; } = null!;
+}
+
+public class MoveAndOrCopy
+{
+    public bool MoveOnly { get; set; }
+    public bool CopyAndMove { get; set; }
+    public MoveAndOrCopy(CheckBox moveOnly, CheckBox copyAndMove)
+    {
+        moveOnly.Click += (sender, args) =>
+        {
+            if (MoveOnly is false)
+            {
+                copyAndMove.IsChecked = false;
+                moveOnly.IsChecked = true;
+                MoveOnly = true;
+                CopyAndMove = false;
+            }
+        };
+        
+        copyAndMove.IsCheckedChanged += (sender, args) =>
+        {
+            if (CopyAndMove is false)
+            {
+                moveOnly.IsChecked = false;
+                copyAndMove.IsChecked = true;
+                CopyAndMove = true;
+                MoveOnly = false;   
+            }
+        };
+    }
 }
 
 public class SearchByCheckBoxes
@@ -48,19 +82,18 @@ public class SearchByCheckBoxes
 }
 
 public  class SortCheckBoxes
-
 {
-    public List<CheckBox> SortOneCheckBoxList { get; set; } = null!;
-    public List<CheckBox> SortTwoCheckBoxList { get; set; } = null!;
+    public List<CheckBox> SortOneCheckBoxList { get; set; } = new();
+    public List<CheckBox> SortTwoCheckBoxList { get; set; } = new();
 
-    public SortCheckBoxes(CheckBox createdOne,CheckBox changedOne,CheckBox lastUpdateOne,CheckBox fileExtensionOne,CheckBox searchTagOne,
-                           CheckBox createdTwo, CheckBox changedTwo, CheckBox lastUpdateTwo, CheckBox fileExtensionTwo, CheckBox searchTagTwo)
+    public SortCheckBoxes(CheckBox createdOne,CheckBox changedOne,CheckBox lastAccessTimeOne,CheckBox fileExtensionOne,CheckBox searchTagOne,
+                           CheckBox createdTwo, CheckBox changedTwo, CheckBox lastAccessTimeTwo, CheckBox fileExtensionTwo, CheckBox searchTagTwo)
     {
         SortOneCheckBoxList =
         [
             createdOne,
             changedOne,
-            lastUpdateOne,
+            lastAccessTimeOne,
             fileExtensionOne,
             searchTagOne
         ];
@@ -69,7 +102,7 @@ public  class SortCheckBoxes
         [
             createdTwo,
             changedTwo,
-            lastUpdateTwo,
+            lastAccessTimeTwo,
             fileExtensionTwo,
             searchTagTwo
         ];

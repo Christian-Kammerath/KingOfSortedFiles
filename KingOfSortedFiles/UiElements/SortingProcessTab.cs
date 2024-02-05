@@ -32,7 +32,7 @@ public class SettingsShow : StackPanel
     {
         var targetDirectoryListBox = new ListBox(){Height = 200, Width = 150};
 
-        targetDirectoryListBox.Items.Add(new TextBlock() { Text = $"[Target Directory] \n\n{Path.GetFileName(SortingSettings.TargetDirectoryPath)}" });
+        targetDirectoryListBox.Items.Add(new TextBlock() { Text = $"[Target Directory] \n\n{Path.GetFileName(UiElementsBinding.SortingSettings.TargetDirectoryPath)}" });
 
         return targetDirectoryListBox;
     }
@@ -43,7 +43,7 @@ public class SettingsShow : StackPanel
 
         sourceDirectoryListBox.Items.Add(new TextBlock() { Text = "[Source Directory]" });
             
-        SortingSettings.SourceDirectoryPathList.ForEach(f =>
+        UiElementsBinding.SortingSettings.SourceDirectoryPathList.ForEach(f =>
         {
             sourceDirectoryListBox.Items.Add(new TextBlock() { Text = Path.GetFileName(f) });
         });
@@ -68,7 +68,7 @@ public class SettingsShow : StackPanel
     private static ListBox GetSearchByCheckBoxList()
     {
         var searchByCheckBoxList = new ListBox(){Height = 200, Width = 150};
-        var searchByCheckBox = SortingSettings.SearchByCheckBoxes;
+        var searchByCheckBox = UiElementsBinding.SortingSettings.SearchByCheckBoxes;
 
         searchByCheckBoxList.Items.Add(new TextBlock() { Text = "[Search by]"});
                 
@@ -95,7 +95,7 @@ public class SettingsShow : StackPanel
 
     private static ListBox[] GetSortingCheckBoxesListArray()
     {
-        var sortingCheckBoxList = SortingSettings
+        var sortingCheckBoxList = UiElementsBinding.SortingSettings
             .SortCheckBoxes!;
 
         var sortingCheckBoxOneListBox = new ListBox(){Height = 200, Width = 180};
@@ -105,8 +105,9 @@ public class SettingsShow : StackPanel
             
         sortingCheckBoxList.SortOneCheckBoxList.ForEach(f =>
         {
-            if ((bool)f.IsChecked!)
-                sortingCheckBoxOneListBox.Items.Add(new TextBlock() { Text = f.Tag!.ToString() });
+            if(f!=null)
+                if ((bool)f.IsChecked!)
+                    sortingCheckBoxOneListBox.Items.Add(new TextBlock() { Text = f.Tag!.ToString() });
         });
             
                 
@@ -117,8 +118,9 @@ public class SettingsShow : StackPanel
             
         sortingCheckBoxList.SortTwoCheckBoxList.ForEach(f =>
         {
-            if ((bool)f.IsChecked!)
-                sortingCheckBoxTwoListBox.Items.Add(new TextBlock() { Text = f.Tag!.ToString() });
+            if(f != null)
+                if ((bool)f.IsChecked!)
+                    sortingCheckBoxTwoListBox.Items.Add(new TextBlock() { Text = f.Tag!.ToString() });
         });
 
         return [sortingCheckBoxOneListBox, sortingCheckBoxTwoListBox];
@@ -128,10 +130,15 @@ public class SettingsShow : StackPanel
     
     private static List<CheckBox> GetAllIsCheckedFileExtensions()
     {
-        return UiElementsBinding.FileExtensionListBox?.Items.OfType<FileExtensionTab>()
+        var fileExtensionList = UiElementsBinding.FileExtensionListBox?.Items.OfType<FileExtensionTab>()
             .SelectMany(stack => stack.Children.OfType<StackPanel>())
             .SelectMany(stackPanel => stackPanel.Children.OfType<CheckBox>().Where(cb => cb.IsChecked == true))
             .ToList()!;
+
+        UiElementsBinding.SortingSettings.FileExtensionList = fileExtensionList.Select(e => e.Tag!.ToString())
+            .ToList()!;
+
+        return fileExtensionList;
 
     }
     
@@ -149,14 +156,16 @@ public class StartStopAndProgress : StackPanel
             Maximum = 100,VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Left};
 
-        var startButton = new Button() { Content = "Start", Background = Brushes.Green };
+        var startButton = new Button() { Content = "Start", Background = Brushes.Green,HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Center};
         startButton.Click += (sender, args) =>
         {
-            
+            new Sorting(UiElementsBinding.SortingSettings).StartSorting();
         };
         
-        Children.Add(startButton);
         Children.Add(ProgressBar);
+        Children.Add(startButton);
+        
     }
 
     public void SetProgressValue(double value)
@@ -180,6 +189,7 @@ public class SortingProcessTab : StackPanel
         logListBox.Items.Remove(lastSortingProcessTab);
         
         Children.Add(new SettingsShow());
+        Children.Add(new StartStopAndProgress());
         
     }
     

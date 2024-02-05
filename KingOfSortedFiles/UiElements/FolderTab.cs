@@ -53,7 +53,7 @@ public class SourceFolderTab : TargetFolderTab
 
         selectCheckBox.IsCheckedChanged += (sender, args) =>
         {
-            SortingSettings.SourceDirectoryPathList.Add(Path.Combine(FolderPath,FolderName));
+            UiElementsBinding.SortingSettings.SourceDirectoryPathList.Add(FolderPath);
             UiElementsBinding.LogListBox!.Items.Add(new SortingProcessTab());
         };  
         

@@ -13,12 +13,16 @@ public static class UiElementsBinding
     public static TextBox? SourcePathBox { get; set; } 
     
     public static TextBox? TargetPathBox { get; set; }
-    
-    public static ListBox? SearchTagListBox { get; set; }
+
+    public static ListBox? SearchTagListBox { get; set; } = new();
     
     public static TextBox? SearchTagTextBox { get; set; }
     public static ListBox? LogListBox { get; set; }
     
+    
+    
+    public static SortingSettings SortingSettings { get; set; }
+
     public static void BindUiElements(MainWindow mainWindow)
     {
         SourceListBox = mainWindow.Find<ListBox>("SourceListBox");
@@ -30,22 +34,35 @@ public static class UiElementsBinding
         SearchTagTextBox = mainWindow.Find<TextBox>("SearchTagTextBox");
         LogListBox = mainWindow.Find<ListBox>("LogListBox");
         
+        
         LoadCheckBoxesToSettings(mainWindow);
+        LoadCopyAndOrMoveCheckBoxes(mainWindow);
+    }
+
+    private static void LoadCopyAndOrMoveCheckBoxes(MainWindow mainWindow)
+    {
+        
+        SortingSettings.MoveAndOrCopy = new MoveAndOrCopy(
+            mainWindow.Find<CheckBox>("MoveOnly")!,
+            mainWindow.Find<CheckBox>("CopyAndMove")!
+            );
     }
 
     private static void LoadCheckBoxesToSettings(MainWindow mainWindow)
     {
 
+        SortingSettings = new SortingSettings();
+        
         SortingSettings.SortCheckBoxes = new SortCheckBoxes(
             mainWindow.Find<CheckBox>("CreatedOne")!,
             mainWindow.Find<CheckBox>("ChangedOne")!,
-            mainWindow.Find<CheckBox>("LastUpdateOne")!,
+            mainWindow.Find<CheckBox>("LastAccessTimeOne")!,
             mainWindow.Find<CheckBox>("FileExtensionOne")!,
             mainWindow.Find<CheckBox>("SearchTagOne")!,
 
             mainWindow.Find<CheckBox>("CreatedTwo")!,
             mainWindow.Find<CheckBox>("ChangedTwo")!,
-            mainWindow.Find<CheckBox>("LastUpdatedTwo")!,
+            mainWindow.Find<CheckBox>("LastAccessTimeTwo")!,
             mainWindow.Find<CheckBox>("FileExtensionTwo")!,
             mainWindow.Find<CheckBox>("SearchTagTwo")!
         );

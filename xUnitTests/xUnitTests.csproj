@@ -27,4 +27,8 @@
       <ProjectReference Include="..\KingOfSortedFiles\KingOfSortedFiles.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="TestDirectory\Target\" />
+    </ItemGroup>
+
 </Project>

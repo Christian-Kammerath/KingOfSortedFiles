@@ -61,8 +61,8 @@
                     </CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
-                    <CheckBox x:Name="LastUpdateOne" Tag="Last updated">
-                        <TextBlock Text="Last updated" Foreground="{Binding TextColor}" FontWeight="Bold"/>
+                    <CheckBox x:Name="LastAccessTimeOne" Tag="LastAccessTime">
+                        <TextBlock Text="Last Access Time" Foreground="{Binding TextColor}" FontWeight="Bold"/>
                     </CheckBox>
                     <CheckBox x:Name="FileExtensionOne" Tag="File extension">
                         <TextBlock Text="File extension" Foreground="{ Binding TextColor}" FontWeight="Bold"/>
@@ -84,18 +84,26 @@
                     </CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
-                    <CheckBox x:Name="LastUpdatedTwo" Tag="Last updated">
-                        <TextBlock Text="Last updated" Foreground="{Binding TextColor}" FontWeight="Bold"/>
+                    <CheckBox x:Name="LastAccessTimeTwo" Tag="LastAccessTime">
+                        <TextBlock Text="Last Access Time" Foreground="{Binding TextColor}" FontWeight="Bold"/>
                     </CheckBox>
-                    <CheckBox x:Name="FileExtensionTwo" Tag="File extension">
+                    <CheckBox x:Name="FileExtensionTwo" Tag="FileExtension">
                         <TextBlock Text="File extension" Foreground="{Binding TextColor}" FontWeight="Bold"/>
                     </CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
-                    <CheckBox x:Name="SearchTagTwo" Tag="Search Tag">
+                    <CheckBox x:Name="SearchTagTwo" Tag="SearchTag">
                         <TextBlock Text="Search Tag" Foreground="{Binding TextColor}" FontWeight="Bold" />
                     </CheckBox>
                 </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <CheckBox x:Name="MoveOnly" >
+                    <TextBlock Text="Move Only"/>
+                </CheckBox>
+                <CheckBox x:Name="CopyAndMove" >
+                    <TextBlock Text="Copy And Move"/>
+                </CheckBox>
             </StackPanel>
             <StackPanel Spacing="5">
                 <TextBlock Text="Search Tag" Foreground="{Binding TextColor}" FontWeight="Bold"/>
