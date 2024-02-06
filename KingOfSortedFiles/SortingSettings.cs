@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using KingOfSortedFiles.UiElements;
 
@@ -16,6 +17,18 @@ public  class SortingSettings
     public  List<string> FileExtensionList { get; set; } = new();
     
     public  MoveAndOrCopy MoveAndOrCopy { get; set; } = null!;
+    
+    public SearchTags SearchTagList { get; set; } = null!;
+}
+
+public class SearchTags
+{
+    public List<string> SearchTagList { get; set; } = new();
+    public SearchTags(ListBox searchTagListBox)
+    {
+        SearchTagList = new List<string>(searchTagListBox.Items
+            .OfType<SearchTagTab>().Select(s => s.SearchTag)!);
+    }
 }
 
 public class MoveAndOrCopy

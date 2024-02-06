@@ -20,7 +20,6 @@ public static class UiElementsBinding
     public static ListBox? LogListBox { get; set; }
     
     
-    
     public static SortingSettings SortingSettings { get; set; }
 
     public static void BindUiElements(MainWindow mainWindow)
@@ -37,8 +36,13 @@ public static class UiElementsBinding
         
         LoadCheckBoxesToSettings(mainWindow);
         LoadCopyAndOrMoveCheckBoxes(mainWindow);
+        LoadSearchTags(SearchTagListBox!);
     }
 
+    private static void LoadSearchTags(ListBox listBox)
+    {
+        SortingSettings.SearchTagList = new SearchTags(listBox);
+    }
     private static void LoadCopyAndOrMoveCheckBoxes(MainWindow mainWindow)
     {
         

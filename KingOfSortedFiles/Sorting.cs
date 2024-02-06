@@ -16,7 +16,7 @@ public class Sorting
     private bool IsFileExtension { get; set; }
     private List<string> SourceDirectoryPathList { get; set; }
     private static string TargetDirectoryPath { get; set; } = null!;
-    private List<string> SearchTagList { get; set; }
+    private List<string> SearchTagList { get; set; } = new()!;
 
     private List<string> FileExtensionFilterList { get; set; }
     
@@ -33,9 +33,8 @@ public class Sorting
         TargetDirectoryPath = sortingSettings.TargetDirectoryPath;
         FileExtensionFilterList = sortingSettings.FileExtensionList;
         MoveAndOrCopyBool = sortingSettings.MoveAndOrCopy;
-        
-       SearchTagList = new List<string>(UiElementsBinding.SearchTagListBox!.Items
-           .OfType<SearchTagTab>().Select(s => s.SearchTag)!);
+
+        SearchTagList = sortingSettings.SearchTagList.SearchTagList;
     }
 
     public void StartSorting()
@@ -150,7 +149,7 @@ public class Sorting
         
     }
 
-    private void MoveFile(DirectoryInfo file, string targetDirectoryPath, bool moveOnly)
+    private void MoveFile(FileInfo file, string targetDirectoryPath, bool moveOnly)
     {
         
         var newTargetDirectory = IsNotPresentCreateTargetDirectory(targetDirectoryPath);
@@ -163,34 +162,38 @@ public class Sorting
         }
     }
 
-    private string CreateTargetDirectoryPath(DirectoryInfo directoryInfo, string targetDirectoryPath,CheckBox? sortingCheckBox)
+    public string CreateTargetDirectoryPath(FileInfo fileInfo, string targetDirectoryPath,CheckBox? sortingCheckBox)
     {
 
         var checkBox = sortingCheckBox;
 
         if ((string)checkBox.Tag! == "Created")
         {
-            return Path.Combine(targetDirectoryPath, directoryInfo.CreationTime.ToString(CultureInfo.CurrentCulture));
+            return Path.Combine(targetDirectoryPath, fileInfo.CreationTime.ToString("yyyy-MM-dd",CultureInfo.CurrentCulture));
         }
 
         if ((string)checkBox.Tag! == "changed")
         {
-            return Path.Combine(targetDirectoryPath, directoryInfo.LastWriteTime.ToString(CultureInfo.CurrentCulture));
+            return Path.Combine(targetDirectoryPath, fileInfo.LastWriteTime.ToString("yyyy-MM-dd",CultureInfo.CurrentCulture));
         }
         
         if ((string)checkBox.Tag! == "LastAccessTime")
         {
-            return Path.Combine(targetDirectoryPath, directoryInfo.LastAccessTime.ToString(CultureInfo.CurrentCulture));
+            return Path.Combine(targetDirectoryPath, fileInfo.LastAccessTime.ToString("yyyy-MM-dd",CultureInfo.CurrentCulture));
         }
         
         if ((string)checkBox.Tag! == "FileExtension")
         {
-            return Path.Combine(targetDirectoryPath,directoryInfo.Extension.Remove('.'));
+            return Path.Combine(targetDirectoryPath,fileInfo.Extension.TrimStart('.'));
         }
         
         
-        return Path.Combine(targetDirectoryPath,SearchTagList.SingleOrDefault(s => Regex.IsMatch(directoryInfo.Name,s))!);
-        
+        var searchTag = Path.Combine(targetDirectoryPath,SearchTagList
+            .SingleOrDefault(s => Regex.IsMatch(fileInfo.Name,s))?? "");
+
+        return !string.IsNullOrEmpty(searchTag) ? 
+            searchTag :
+            "could-not-be-classified";
     }
 
     public DirectoryInfo IsNotPresentCreateTargetDirectory(string directoryPath)
@@ -201,21 +204,21 @@ public class Sorting
 
     }
 
-    private List<DirectoryInfo> GetAllFiles(bool isFileExtensions, bool isSearchTags,string sourcePath)
+    private List<FileInfo> GetAllFiles(bool isFileExtensions, bool isSearchTags,string sourcePath)
     {
         return isSearchTags switch
         {
             true when !isFileExtensions => Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories)
-                .Select(f => new DirectoryInfo(f))
+                .Select(f => new FileInfo(f))
                 .Where(f => Regex.IsMatch(f.Name, string.Join("||", SearchTagList)))
                 .ToList(),
             true when isFileExtensions => Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories)
-                .Select(f => new DirectoryInfo(f))
+                .Select(f => new FileInfo(f))
                 .Where(f => Regex.IsMatch(f.Name, string.Join("||", SearchTagList)) &&
                             FileExtensionFilterList.Contains(f.Extension))
                 .ToList(),
             false when isFileExtensions => (Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories)
-                .Select(f => new DirectoryInfo(f))
+                .Select(f => new FileInfo(f))
                 .Where(f => FileExtensionFilterList.Contains(f.Extension))
                 .ToList()),
             _ => null!
