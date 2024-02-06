@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Layout;
+using Avalonia.Media;
 
 namespace KingOfSortedFiles.UiElements;
 
@@ -12,7 +13,9 @@ public class FileExtensionTab : StackPanel
         
         Children.Add(new TextBlock()
         {
-            Text = categoryName
+            Text = categoryName,
+            FontWeight = FontWeight.Bold,
+            Foreground = Brushes.Azure
         });
 
         var increase = 2;
@@ -27,8 +30,26 @@ public class FileExtensionTab : StackPanel
         {
             if (i <= increase)
             {
-                lastStackPanel.Children.Add(new TextBlock(){Text = fileExtensionArray[i]});
-                lastStackPanel.Children.Add(new CheckBox(){Tag = fileExtensionArray[i]});
+                lastStackPanel.Children.Add(new TextBlock()
+                {
+                    Text = fileExtensionArray[i],
+                    FontWeight = FontWeight.Bold,
+                    Foreground = Brushes.Azure
+                });
+
+                var checkBox = new CheckBox()
+                {
+                    Tag = fileExtensionArray[i],
+                    FontWeight = FontWeight.Bold,
+                    Foreground = Brushes.Azure
+                };
+
+                checkBox.IsCheckedChanged += (sender, args) =>
+                {
+                    UiElementsBinding.LogListBox!.Items.Add(new SortingProcessTab());
+                };
+                
+                lastStackPanel.Children.Add(checkBox);
             }
             else
             {
@@ -42,6 +63,8 @@ public class FileExtensionTab : StackPanel
         }
         if(lastStackPanel.Children.Count > 0)
             Children.Add(lastStackPanel);
+        
+        
 
     }
 }

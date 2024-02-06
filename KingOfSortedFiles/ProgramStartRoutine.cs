@@ -1,11 +1,5 @@
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using Avalonia.Controls;
 using KingOfSortedFiles.UiElements;
-using KingOfSortedFiles.Views;
 using Microsoft.Extensions.Configuration;
 
 namespace KingOfSortedFiles;
@@ -14,16 +8,21 @@ public class ProgramStartRoutine
 {
     private AppSettings Settings { get; set; } = null!;
 
-    public ProgramStartRoutine(MainWindow mainWindow)
+    public ProgramStartRoutine()
     {
-        UiElementsBinding.BindUiElements(mainWindow);
-        ReadJsonSettings();
-        LoadFileExtensionsInListBox();
-        ReadStartPathFilesAndDirectory();
         
-        CustomLogSystem
-            .BindListBox(mainWindow.Find<ListBox>("LogListBox"))
-            .BindLogFile(Path.Combine(Directory.GetCurrentDirectory(),"Log.txt"));
+        CustomLogSystem.Debug("Read appSettings.json",false);
+        ReadJsonSettings();
+        CustomLogSystem.Debug("Read appSettings.json finish",false);
+        
+        CustomLogSystem.Debug("Load File Extensions In ListBox",false);
+        LoadFileExtensionsInListBox();
+        CustomLogSystem.Debug("Load File Extensions In ListBox finish",false);
+
+        
+        new LoadElementsIntoList(Settings.SourceStartPath,UiElementsBinding.SourceListBox!);
+        new LoadElementsIntoList(Settings.TargetStartPath,UiElementsBinding.TargetListBox!);
+        
     }
 
     private void ReadJsonSettings()
@@ -60,36 +59,5 @@ public class ProgramStartRoutine
         
     }
 
-    private async Task ReadStartPathFilesAndDirectory()
-    {
-        if (string.IsNullOrEmpty(Settings.StartPath))
-        {
-
-            var isLinux =  RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
-            var isWindows =  RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-
-            var driverList = new List<Drive>();
-
-            if (isLinux)
-                driverList =  DriveInfoLinux.GetDrivesString()
-                    .StringManipulator()
-                    .CreateDriveList();
-            
-            if (isWindows)
-                driverList = DriveInfo.GetDrives().Select(d => new Drive()
-                    { 
-                        Name = d.Name,
-                        FsType = d.DriveFormat,
-                        Size = d.TotalSize.ToString(),
-                        MountPoint = d.RootDirectory.FullName
-                        
-                    }).ToList();
-            
-            foreach (var item in driverList)
-            {
-                UiElementsBinding.SourceListBox!.Items.Add(new DriverTab(item));
-            }
-        }
-    }
     
 }
