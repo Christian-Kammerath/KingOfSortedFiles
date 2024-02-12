@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -5,7 +6,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using KingOfSortedFiles.UiElements;
 
 namespace KingOfSortedFiles;
 
@@ -16,7 +16,7 @@ public class Sorting
     private bool IsFileExtension { get; set; }
     private List<string> SourceDirectoryPathList { get; set; }
     private static string TargetDirectoryPath { get; set; } = null!;
-    private List<string> SearchTagList { get; set; } = new()!;
+    private List<string> SearchTagList { get; set; }
 
     private List<string> FileExtensionFilterList { get; set; }
     
@@ -45,75 +45,18 @@ public class Sorting
             var sortCheckBoxOne = SortCheckBoxes!.SortOneCheckBoxList.SingleOrDefault(c => (bool)c.IsChecked!);
             var sortCheckBoxTwo = SortCheckBoxes!.SortTwoCheckBoxList.SingleOrDefault(c => (bool)c.IsChecked!);
 
-            
-            for (int i = 0; i < SourceDirectoryPathList.Count;)
+            Parallel.ForEach(SourceDirectoryPathList, dir =>
             {
-                switch(SourceDirectoryPathList.Count)
-                {
-                    case >= 4:
-                        var taskOne = new Task(()=> SortingTask(i,sortCheckBoxOne!,sortCheckBoxTwo!));
-                        var taskTwo = new Task(()=>SortingTask(i+1,sortCheckBoxOne!,sortCheckBoxTwo!));
-                        var taskThree = new Task(()=>SortingTask(i+2,sortCheckBoxOne!,sortCheckBoxTwo!));
-                        var taskFour = new Task(()=>SortingTask(i+3,sortCheckBoxOne!,sortCheckBoxTwo!));
-                        
-                        taskOne.Start();
-                        taskTwo.Start();
-                        taskThree.Start();
-                        taskFour.Start();
-
-                        taskOne.Wait();
-                        taskTwo.Wait();
-                        taskThree.Wait();
-                        taskFour.Wait();
-
-                        i += 4;
-                        break;
-                    case 3:
-                        var taskOneA = new Task(()=> SortingTask(i,sortCheckBoxOne!,sortCheckBoxTwo!));
-                        var taskTwoA = new Task(()=>SortingTask(i+1,sortCheckBoxOne!,sortCheckBoxTwo!));
-                        var taskThreeA = new Task(()=>SortingTask(i+2,sortCheckBoxOne!,sortCheckBoxTwo!));
-                        
-                        taskOneA.Start();
-                        taskTwoA.Start();
-                        taskThreeA.Start();
-
-                        taskOneA.Wait();
-                        taskTwoA.Wait();
-                        taskThreeA.Wait();
-
-                        i += 3;
-                        break;
-                    case 2:
-                        var taskOneB = new Task(()=> SortingTask(i,sortCheckBoxOne!,sortCheckBoxTwo!));
-                        var taskTwoB = new Task(()=>SortingTask(i+1,sortCheckBoxOne!,sortCheckBoxTwo!));
-                        
-                        taskOneB.Start();
-                        taskTwoB.Start();
-
-                        taskOneB.Wait();
-                        taskTwoB.Wait();
-
-                        i += 2;
-                        break;
-                    case 1:
-                        var taskOneC = new Task(()=> SortingTask(i,sortCheckBoxOne!,sortCheckBoxTwo!));
-                        taskOneC.Start();
-                        taskOneC.Wait();
-                        i += 1;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            
+                SortingTask(dir,sortCheckBoxOne,sortCheckBoxTwo);
+            });
             
         }
     }
 
-    private void SortingTask(int index, CheckBox? sortCheckBoxOne, CheckBox? sortCheckBoxTwo  )
+    public  void SortingTask(string path , CheckBox? sortCheckBoxOne, CheckBox? sortCheckBoxTwo  )
     {
         
-        var allFiles = GetAllFiles(IsFileExtension,IsSearchTags,SourceDirectoryPathList[index]);
+        var allFiles = GetAllFiles(IsFileExtension,IsSearchTags,path);
         
         
         
@@ -152,59 +95,60 @@ public class Sorting
     private void MoveFile(FileInfo file, string targetDirectoryPath, bool moveOnly)
     {
         
-        var newTargetDirectory = IsNotPresentCreateTargetDirectory(targetDirectoryPath);
+        var newTargetDirectory =  IsNotPresentCreateTargetDirectory(targetDirectoryPath);
                 
         if(moveOnly)
-            File.Move(file.FullName,newTargetDirectory.FullName);
+            File.Move(newTargetDirectory.FullName,file.FullName);
         else
         {
-            File.Copy(file.FullName,newTargetDirectory.FullName);
+            try
+            {
+                File.Copy(  file.FullName,Path.Combine( newTargetDirectory.FullName,file.Name) );
+            }
+            catch (IOException e)
+            {
+                var newFileName = file.Name + $"-CopyId({new Random().Next(1000,10000)})";
+                File.Copy(  file.FullName,Path.Combine( newTargetDirectory.FullName,newFileName) );
+            }
         }
     }
 
     public string CreateTargetDirectoryPath(FileInfo fileInfo, string targetDirectoryPath,CheckBox? sortingCheckBox)
     {
-
-        var checkBox = sortingCheckBox;
-
-        if ((string)checkBox.Tag! == "Created")
+        switch ((string)sortingCheckBox!.Tag!)
         {
-            return Path.Combine(targetDirectoryPath, fileInfo.CreationTime.ToString("yyyy-MM-dd",CultureInfo.CurrentCulture));
-        }
+            case "Created":
+                return Path.Combine(targetDirectoryPath, fileInfo.CreationTime.ToString("yyyy-MM-dd",CultureInfo.CurrentCulture));
+            case "changed":
+                return Path.Combine(targetDirectoryPath, fileInfo.LastWriteTime.ToString("yyyy-MM-dd",CultureInfo.CurrentCulture));
+            case "LastAccessTime":
+                return Path.Combine(targetDirectoryPath, fileInfo.LastAccessTime.ToString("yyyy-MM-dd",CultureInfo.CurrentCulture));
+            case "FileExtension":
+                return Path.Combine(targetDirectoryPath,fileInfo.Extension.TrimStart('.'));
+            default:
+            {
+                var searchTag = SearchTagList.SingleOrDefault(s => Regex.IsMatch(fileInfo.Name,s));
 
-        if ((string)checkBox.Tag! == "changed")
-        {
-            return Path.Combine(targetDirectoryPath, fileInfo.LastWriteTime.ToString("yyyy-MM-dd",CultureInfo.CurrentCulture));
-        }
-        
-        if ((string)checkBox.Tag! == "LastAccessTime")
-        {
-            return Path.Combine(targetDirectoryPath, fileInfo.LastAccessTime.ToString("yyyy-MM-dd",CultureInfo.CurrentCulture));
-        }
-        
-        if ((string)checkBox.Tag! == "FileExtension")
-        {
-            return Path.Combine(targetDirectoryPath,fileInfo.Extension.TrimStart('.'));
-        }
-        
-        
-        var searchTag = Path.Combine(targetDirectoryPath,SearchTagList
-            .SingleOrDefault(s => Regex.IsMatch(fileInfo.Name,s))?? "");
+                return string.IsNullOrEmpty(searchTag) ? Path.Combine(targetDirectoryPath,"could-not-be-classified") : Path.Combine(targetDirectoryPath, searchTag);
 
-        return !string.IsNullOrEmpty(searchTag) ? 
-            searchTag :
-            "could-not-be-classified";
+            }
+        }
     }
 
-    public DirectoryInfo IsNotPresentCreateTargetDirectory(string directoryPath)
+    private string SingleOrDefault(Func<object, bool> func)
     {
-        return Directory.Exists(directoryPath)
+        throw new NotImplementedException();
+    }
+
+    public  DirectoryInfo IsNotPresentCreateTargetDirectory(string directoryPath)
+    {
+       return  Directory.Exists(directoryPath)
             ? new DirectoryInfo(directoryPath)
             : Directory.CreateDirectory(directoryPath);
 
     }
 
-    private List<FileInfo> GetAllFiles(bool isFileExtensions, bool isSearchTags,string sourcePath)
+    public List<FileInfo> GetAllFiles(bool isFileExtensions, bool isSearchTags,string sourcePath)
     {
         return isSearchTags switch
         {
@@ -221,7 +165,7 @@ public class Sorting
                 .Select(f => new FileInfo(f))
                 .Where(f => FileExtensionFilterList.Contains(f.Extension))
                 .ToList()),
-            _ => null!
+            _ => Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories).Select(f => new FileInfo(f)).ToList()
         };
     }
 
@@ -283,7 +227,6 @@ public class Sorting
         return true;
 
     }
-
     
     
 }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KingOfSortedFiles")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+35a33c0bfb64c6615cc559ca4c830bdc2ea1630f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+97f1db02947d4503918c0ee1adb816a198173414")]
 [assembly: System.Reflection.AssemblyProductAttribute("KingOfSortedFiles")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KingOfSortedFiles")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

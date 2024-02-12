@@ -94,7 +94,7 @@ public class SortingTest
             if(i < 5)
                 searchTagListBox.Items.Add(new SearchTagTab(fileName));
 
-            var sourcePath = Path.Combine(Directory.GetCurrentDirectory(), "TestDirectory", "Source",fileName);
+            var sourcePath = Path.Combine(Directory.GetCurrentDirectory(), "TestDirectory", "Source","Generates_Target_Directory",fileName);
             File.Create(sourcePath);
         }
         
@@ -103,9 +103,9 @@ public class SortingTest
 
 
         var fileList = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(),
-            "TestDirectory", "Source"),"*",SearchOption.AllDirectories).Select(d => new FileInfo(d)).ToList();
+            "TestDirectory", "Source","Generates_Target_Directory"),"*",SearchOption.AllDirectories).Select(d => new FileInfo(d)).ToList();
 
-
+        
         // Act
 
         foreach (var files in fileList)
@@ -131,9 +131,193 @@ public class SortingTest
             if(Regex.IsMatch(files.Name,"^[0-4]$"))
                 Assert.Contains(searchTagResult, SortingSettings.SearchTagList.SearchTagList.Select(e => Path.Combine(targetPath,e) ));
 
+            
+            File.Delete(files.FullName);
+        }
+        
+    }
+
+    [Fact]
+    public void Searches_For_Files_Based_On_The_File_Extension_A_Search_Tag_Or_Both_Combined()
+    {
+        //Arrange 
+        SetUp();
+
+        var sourceDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "TestDirectory", "Source");
+        
+        var fileExtensionList = new List<string>
+        {
+            ".pdf",".txt",".asc",".doc",".odt",".xls",
+            ".avi",".bmp",".dss",".gif",".jpeg",".mov",
+            ".mp3",".mp4",".png",".ram",".rmvb",".tif",".wav",".wmf"
+        };
+
+        var searchTagList = new List<string>
+        {
+            "Booking",
+            "Invoice",
+            "Billing"
+        };
+        
+        var randomFileList = new List<FileInfo>();
+
+        for (int i = 0; i < 100; i++)
+        {
+            var random = new Random();
+            var fileName = random.Next(5000, 10000);
+            
+            var filePath = Path.Combine(sourceDirectoryPath,
+                $"{fileName}{searchTagList[random.Next(0, searchTagList.Count-1)]}{fileExtensionList[random.Next(0, fileExtensionList.Count-1)]}");
+
+            File.Create(filePath);
+            randomFileList.Add(new FileInfo(filePath));
+        }
+        
+        //Act
+        foreach (var file in randomFileList)
+        {
+            SortingSettings.FileExtensionList = [".pdf", ".txt"];
+            var resultFilesWithFileExtension = new Sorting(SortingSettings)
+                .GetAllFiles( true, false,sourceDirectoryPath);
+
+            SortingSettings.SearchTagList.SearchTagList = ["Invoice"];
+            var resultFilesWithSearchTag = new Sorting(SortingSettings)
+                .GetAllFiles( false, true,sourceDirectoryPath);
+            
+            var resultFilesWithSearchTagAndFileExtension = new Sorting(SortingSettings)
+                .GetAllFiles( true, true,sourceDirectoryPath);
+
+            //Assert
+            Assert.All(resultFilesWithFileExtension, element => 
+                Assert.Contains(element.Extension, fileExtensionList));
+            
+            Assert.All(resultFilesWithSearchTag, element =>
+                Assert.Matches("Invoice", element.Name));
+            
+            Assert.All(resultFilesWithSearchTagAndFileExtension,element =>
+            {
+                Assert.Matches("Invoice", element.Name);
+                Assert.Contains(element.Extension, fileExtensionList);
+            });
+            
+        }
+        
+        randomFileList.ForEach(f => File.Delete(f.FullName));
+        
+    }
+    [Fact]
+    public void Sorts_Files_Into_Folders_And_Subfolders_According_To_Parameters_In_The_Target_Folder()
+    {
+        //Arrange
+        SetUp();
+
+        
+        
+
+        var isSortingByCreateTime = new CheckBox() { IsChecked = true ,Tag = "Created"};
+        var isSortingByLastAccessTime = new CheckBox() { IsChecked = true,Tag = "LastAccessTime"};
+        var isSortingByFileExtension = new CheckBox() { IsChecked = true ,Tag = "FileExtension"};
+        var isSortingBySearchTag = new CheckBox() { IsChecked = true,Tag = "SearchTag"};
+        CheckBox isFalseCheckBox = null;
+        
+        var sourceTestFilePath = Path.Combine(Directory.GetCurrentDirectory(), "TestDirectory", "Source");
+        var targetTestFilePath = Path.Combine(Directory.GetCurrentDirectory(), "TestDirectory", "Target");  
+
+        SortingSettings.SearchTagList.SearchTagList = ["Invoice"];
+        
+        
+        var testFiles = new List<FileInfo>()
+        {
+            new ( Path.Combine(sourceTestFilePath,"Invoice.txt")),
+            new( Path.Combine(sourceTestFilePath,"Invoice.pdf")),
+            new ( Path.Combine(sourceTestFilePath,"Invoice.mp4")),
+            new ( Path.Combine(sourceTestFilePath,"Booking.txt")),
+            new ( Path.Combine(sourceTestFilePath,"Booking.pdf")),
+            new ( Path.Combine(sourceTestFilePath,"Booking.mp4"))
+        };
+
+        foreach (var file in testFiles)
+        {
+            var containsSearchTag = SortingSettings
+                .SearchTagList
+                .SearchTagList
+                .Contains(file.Name.Split('.')[0]);
+
+
+            var random = new Random();
+            
+            var randomYear = random.Next(1980, 2024);
+            var randomMonth = random.Next(1, 12);
+            var randomDay = random.Next(1, 30);
+
+            using (FileStream fileStream = file.Create())
+            {
+                file.LastAccessTime = new DateTime(randomYear, randomMonth, randomDay);
+                file.CreationTime = new DateTime(randomYear, randomMonth, randomDay); 
+            }
+            
+            
+
+            var expectedPathIsSortingByLastAccessTime = Path.Combine(targetTestFilePath, $"{randomYear}-{randomMonth:D2}-{randomDay:D2}");
+            new Sorting(SortingSettings).SortingTask(sourceTestFilePath,isSortingByLastAccessTime,isFalseCheckBox);
+            
+            var expectedPathIsSortingByCreateTime = Path.Combine(targetTestFilePath, $"{randomYear}-{randomMonth:D2}-{randomDay:D2}");
+            new Sorting(SortingSettings).SortingTask(sourceTestFilePath,isSortingByCreateTime,isFalseCheckBox);
+            
+            var expectedPathIsSortingByFileExtension = Path.Combine(targetTestFilePath, $"{file.Extension.TrimStart('.')}");
+            new Sorting(SortingSettings).SortingTask(sourceTestFilePath,isSortingByFileExtension,isFalseCheckBox);
+            
+            var expectedPathIsSortingBySearchTag = Path.Combine(targetTestFilePath, $"{file.Name.Split('.')[0]}");
+            var alternativePathIsSortingBySearchTag = Path.Combine(targetTestFilePath, "could-not-be-classified");
+            new Sorting(SortingSettings).SortingTask(sourceTestFilePath,isSortingBySearchTag,isFalseCheckBox);
+            
+            var expectedPathIsSortingBySearchTagAndFileExtension = Path.Combine(targetTestFilePath, $"{file.Name.Split('.')[0]}", $"{file.Extension.TrimStart('.')}"); 
+            var alternativePathIsSortingBySearchTagAndFileExtension = Path.Combine(targetTestFilePath,"could-not-be-classified",$"{file.Extension.TrimStart('.')}");
+            new Sorting(SortingSettings).SortingTask(sourceTestFilePath,isSortingBySearchTag,isSortingByFileExtension);  
+            
+            var expectedPathIsSortingByFileExtensionAndSearchTag = Path.Combine( targetTestFilePath,$"{file.Extension.TrimStart('.')}", $"{file.Name.Split('.')[0]}");
+            var alternativePathIsSortingByFileExtensionAndSearchTag = Path.Combine( targetTestFilePath,$"{file.Extension.TrimStart('.')}", "could-not-be-classified");
+            new Sorting(SortingSettings).SortingTask(sourceTestFilePath,isSortingByFileExtension,isSortingBySearchTag);                                 
+            
+            var expectedPathIsSortingByCreateTimeAndSearchTag = Path.Combine(targetTestFilePath, $"{randomYear}-{randomMonth:D2}-{randomDay:D2}", $"{file.Name.Split('.')[0]}");
+            var alternativePathIsSortingByCreateTimeAndSearchTag = Path.Combine(targetTestFilePath, $"{randomYear}-{randomMonth:D2}-{randomDay:D2}", "could-not-be-classified");
+            new Sorting(SortingSettings).SortingTask(sourceTestFilePath,isSortingByCreateTime,isSortingBySearchTag);                 
+            
+            var expectedPathIsSortingByCreateTimeAndFileExtension = Path.Combine(targetTestFilePath, $"{randomYear}-{randomMonth:D2}-{randomDay:D2}", $"{file.Extension.TrimStart('.')}"); 
+            new Sorting(SortingSettings).SortingTask(sourceTestFilePath,isSortingByCreateTime,isSortingByFileExtension);
+            
+            var expectedPathIsSortingByFileExtensionAndCreateTime = Path.Combine(targetTestFilePath, $"{file.Extension.TrimStart('.')}",$"{randomYear}-{randomMonth:D2}-{randomDay:D2}");  
+            new Sorting(SortingSettings).SortingTask(sourceTestFilePath,isSortingByFileExtension,isSortingByCreateTime);    
+            
+            //Assert
+            Assert.True(Directory.Exists(expectedPathIsSortingByLastAccessTime));
+            Assert.True(Directory.Exists(expectedPathIsSortingByCreateTime));
+            Assert.True(Directory.Exists(expectedPathIsSortingByFileExtension));
+
+            Assert.True( containsSearchTag
+                ? Directory.Exists(expectedPathIsSortingBySearchTag)
+                : Directory.Exists(alternativePathIsSortingBySearchTag));
+            
+            Assert.True( containsSearchTag
+                ? Directory.Exists(expectedPathIsSortingBySearchTagAndFileExtension)
+                : Directory.Exists(alternativePathIsSortingBySearchTagAndFileExtension));
+
+            Assert.True( containsSearchTag
+                ? Directory.Exists(expectedPathIsSortingByFileExtensionAndSearchTag)
+                : Directory.Exists(alternativePathIsSortingByFileExtensionAndSearchTag));
+            
+            Assert.True( containsSearchTag
+                ? Directory.Exists(expectedPathIsSortingByCreateTimeAndSearchTag)
+                : Directory.Exists(alternativePathIsSortingByCreateTimeAndSearchTag));
+            
+            Assert.True(Directory.Exists(expectedPathIsSortingByCreateTimeAndFileExtension));   
+            Assert.True(Directory.Exists(expectedPathIsSortingByFileExtensionAndCreateTime));
+            
+            
+            Directory.Delete(targetTestFilePath,true);
+            
         }
         
         
     }
-    
 }

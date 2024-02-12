@@ -29,7 +29,6 @@
 
     <ItemGroup>
       <Folder Include="TestDirectory\Source\" />
-      <Folder Include="TestDirectory\Target\" />
     </ItemGroup>
 
 </Project>

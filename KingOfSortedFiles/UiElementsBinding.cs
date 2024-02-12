@@ -19,6 +19,10 @@ public static class UiElementsBinding
     public static TextBox? SearchTagTextBox { get; set; }
     public static ListBox? LogListBox { get; set; }
     
+    public static TextBox SourceSearchBox { get; set; } = null!;
+    
+    public static TextBox TargetSearchBox { get; set; } = null!;
+
     
     public static SortingSettings SortingSettings { get; set; }
 
@@ -32,6 +36,8 @@ public static class UiElementsBinding
         SearchTagListBox = mainWindow.Find<ListBox>("SearchTagListBox");
         SearchTagTextBox = mainWindow.Find<TextBox>("SearchTagTextBox");
         LogListBox = mainWindow.Find<ListBox>("LogListBox");
+        SourceSearchBox = mainWindow.Find<TextBox>("SourceSearchBox")!;
+        TargetSearchBox = mainWindow.Find<TextBox>("TargetSearchBox")!;
         
         
         LoadCheckBoxesToSettings(mainWindow);

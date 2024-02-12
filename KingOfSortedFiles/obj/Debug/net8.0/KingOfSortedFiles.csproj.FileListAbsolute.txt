@@ -146,3 +146,5 @@
 /home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/bin/Debug/net8.0/Microsoft.Extensions.Primitives.dll
 /home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/bin/Debug/net8.0/AppSettings.cs
 /home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/bin/Debug/net8.0/appSettings.json
+/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/bin/Debug/net8.0/Python.Runtime.dll
+/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/bin/Debug/net8.0/GetFolder/main.py
