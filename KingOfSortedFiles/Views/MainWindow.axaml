@@ -129,7 +129,7 @@
         </StackPanel>
         
         <StackPanel Grid.Column="5" Grid.Row="1" Margin="0,0,0,10" Grid.RowSpan="2">
-            <TextBox x:Name="SourceSearchBox" Text="Search" Foreground="Azure" Background="Black" CaretBrush="Azure" />
+            <TextBox x:Name="SourceSearchBox" TextChanged="SourceSearchBox_OnTextChanged" Watermark="Search" Foreground="Azure" Background="Black" CaretBrush="Azure" />
         </StackPanel>
         
         <StackPanel Grid.Column="3" Grid.Row="1" Margin="0,0,0,10" Grid.RowSpan="2">
@@ -141,7 +141,7 @@
         </StackPanel>
         
         <StackPanel Grid.Column="9" Grid.Row="1">
-            <TextBox x:Name="TargetSearchBox" Text="Search" Foreground="Azure" CaretBrush="Azure" Background="Black" />
+            <TextBox x:Name="TargetSearchBox" TextChanged="TargetSearchBox_OnTextChanged"  Watermark="Search" Foreground="Azure" CaretBrush="Azure" Background="Black" />
         </StackPanel>
 
     </Grid>

@@ -1,5 +1,4 @@
 using System.IO;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using KingOfSortedFiles.UiElements;
@@ -32,12 +31,12 @@ public partial class MainWindow : Window
         var sourcePathBox = UiElementsBinding.SourcePathBox;
         var sourceListBox = UiElementsBinding.SourceListBox;
 
-        if (Directory.Exists(sourcePathBox!.Text) || string.IsNullOrEmpty(sourcePathBox!.Text))
+        if (Directory.Exists(sourcePathBox!.Text) || string.IsNullOrEmpty(sourcePathBox.Text))
             new LoadElementsIntoList(sourcePathBox.Text!, sourceListBox!);
         else
         {
             sourceListBox!.Items.Clear();
-            sourceListBox!.Items.Add(new TextBlock() { Text = "Path not found" });
+            sourceListBox.Items.Add(new TextBlock() { Text = "Path not found" });
         }
 
     }
@@ -47,12 +46,12 @@ public partial class MainWindow : Window
         var targetPathBox = UiElementsBinding.TargetPathBox;
         var targetListBox = UiElementsBinding.TargetListBox;
         
-        if (Directory.Exists(targetPathBox!.Text) || string.IsNullOrEmpty(targetPathBox!.Text))
+        if (Directory.Exists(targetPathBox!.Text) || string.IsNullOrEmpty(targetPathBox.Text))
             new LoadElementsIntoList(targetPathBox.Text!, targetListBox!);
         else
         {
             targetListBox!.Items.Clear();
-            targetListBox!.Items.Add(new TextBlock() { Text = "Path not found" });
+            targetListBox.Items.Add(new TextBlock() { Text = "Path not found" });
         }
             
     }
@@ -65,8 +64,8 @@ public partial class MainWindow : Window
         if (searchTagString != "Add new Search Tag" &&
             !string.IsNullOrEmpty(searchTagString))
         {
-            UiElementsBinding.SearchTagListBox!.Items.Add(new SearchTagTab(searchTagString!));
-            UiElementsBinding.LogListBox.Items.Add(new SortingProcessTab());
+            UiElementsBinding.SearchTagListBox!.Items.Add(new SearchTagTab(searchTagString));
+            UiElementsBinding.LogListBox!.Items.Add(new SortingProcessTab());
         }
     }
 
@@ -91,6 +90,69 @@ public partial class MainWindow : Window
     {
         OpensSettingsFile.OpenFile(Path.Combine(Directory.GetCurrentDirectory(),"appSettings.json"));
     }
+
+
+    private void TargetSearchBox_OnTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        var curedTargetPath = UiElementsBinding.TargetPathBox!.Text!;
+        var selectedTextBox = (TextBox)sender!;
+        
+        if(!string.IsNullOrEmpty(curedTargetPath))
+        {
+            if (!string.IsNullOrEmpty(selectedTextBox.Text))
+            {
+
+                var directory = DirectorySearch.GetDirectory(curedTargetPath, selectedTextBox.Text);
+                
+              UiElementsBinding.TargetListBox!.Items.Clear();
+              foreach (var dir in directory)
+              {
+                  UiElementsBinding.TargetListBox.Items.Add(new TargetFolderTab(dir));
+              }
+
+            }
+            
+            else
+            {
+                UiElementsBinding.TargetListBox!.Items.Clear();
+                new LoadElementsIntoList(curedTargetPath, UiElementsBinding.TargetListBox);
+
+            }
+            
+        }
+        
+    }
+
+    private void SourceSearchBox_OnTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        var curedSourcePath = UiElementsBinding.SourcePathBox!.Text!;
+        var selectedTextBox = (TextBox)sender!;
+        
+        if(!string.IsNullOrEmpty(curedSourcePath))
+        {
+
+            if (!string.IsNullOrEmpty(selectedTextBox.Text))
+            {
+                var directoryInfos = DirectorySearch.GetDirectory(curedSourcePath,selectedTextBox.Text);
+                    
+                UiElementsBinding.SourceListBox!.Items.Clear();
+                foreach (var dir in directoryInfos)
+                {
+                    UiElementsBinding.SourceListBox.Items.Add(new TargetFolderTab(dir));
+                }
+                    
+            }
+            else
+            {
+                UiElementsBinding.TargetListBox!.Items.Clear();
+                new LoadElementsIntoList(curedSourcePath, UiElementsBinding.TargetListBox);
+
+            }    
+            
+        }    
+        
+    }
+
 
    
 }
