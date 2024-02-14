@@ -45,10 +45,10 @@ public class Sorting
             var sortCheckBoxOne = SortCheckBoxes!.SortOneCheckBoxList.SingleOrDefault(c => (bool)c.IsChecked!);
             var sortCheckBoxTwo = SortCheckBoxes!.SortTwoCheckBoxList.SingleOrDefault(c => (bool)c.IsChecked!);
 
-            Parallel.ForEach(SourceDirectoryPathList, dir =>
+            foreach(var dir in SourceDirectoryPathList)
             {
                 SortingTask(dir,sortCheckBoxOne,sortCheckBoxTwo);
-            });
+            }
             
         }
     }
