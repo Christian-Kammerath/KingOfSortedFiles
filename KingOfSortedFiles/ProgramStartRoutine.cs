@@ -20,8 +20,8 @@ public class ProgramStartRoutine
         CustomLogSystem.Debug("Load File Extensions In ListBox finish",false);
 
         
-        new LoadElementsIntoList(Settings.SourceStartPath,UiElementsBinding.SourceListBox!);
-        new LoadElementsIntoList(Settings.TargetStartPath,UiElementsBinding.TargetListBox!);
+        new LoadElementsIntoList(Settings.SourceStartPath,UiElementsBinding.SourceListBox!,true);
+        new LoadElementsIntoList(Settings.TargetStartPath,UiElementsBinding.TargetListBox!,false);
         
     }
 

@@ -19,13 +19,13 @@ public class TargetFolderTab : StackPanel
         
         Spacing = 100;
         
-        var iconPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Folder.ico");
+        var iconPath = Path.Combine(Directory.GetCurrentDirectory(), "Icons", "Folder.ico");
         var icon = new Image() { Source = new Bitmap(iconPath), Width = 60, Height = 100,VerticalAlignment = VerticalAlignment.Center};
         
         icon.DoubleTapped += (sender, args) =>
         {
             var listBox = Parent as ListBox;
-            new LoadElementsIntoList(FolderPath, listBox!);
+            new LoadElementsIntoList(FolderPath, listBox!,false);
         };
         
         Orientation = Orientation.Horizontal;

@@ -1,6 +1,7 @@
 using System.IO;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using KingOfSortedFiles.UiElements;
 
 namespace KingOfSortedFiles.Views;
@@ -32,7 +33,7 @@ public partial class MainWindow : Window
         var sourceListBox = UiElementsBinding.SourceListBox;
 
         if (Directory.Exists(sourcePathBox!.Text) || string.IsNullOrEmpty(sourcePathBox.Text))
-            new LoadElementsIntoList(sourcePathBox.Text!, sourceListBox!);
+            new LoadElementsIntoList(sourcePathBox.Text!, sourceListBox!,false);
         else
         {
             sourceListBox!.Items.Clear();
@@ -47,7 +48,7 @@ public partial class MainWindow : Window
         var targetListBox = UiElementsBinding.TargetListBox;
         
         if (Directory.Exists(targetPathBox!.Text) || string.IsNullOrEmpty(targetPathBox.Text))
-            new LoadElementsIntoList(targetPathBox.Text!, targetListBox!);
+            new LoadElementsIntoList(targetPathBox.Text!, targetListBox!,false);
         else
         {
             targetListBox!.Items.Clear();
@@ -101,21 +102,24 @@ public partial class MainWindow : Window
         {
             if (!string.IsNullOrEmpty(selectedTextBox.Text))
             {
+                var listBox = UiElementsBinding.TargetListBox;
+                listBox!.Items.Clear();
 
-                var directory = DirectorySearch.GetDirectory(curedTargetPath, selectedTextBox.Text);
-                
-              UiElementsBinding.TargetListBox!.Items.Clear();
-              foreach (var dir in directory)
-              {
-                  UiElementsBinding.TargetListBox.Items.Add(new TargetFolderTab(dir));
-              }
+                Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    foreach (var item in DirectorySearch.SearchDirectory(curedTargetPath,selectedTextBox.Text))
+                    {
+                        listBox.Items.Add(new TargetFolderTab(item));
+                    }
+                });
 
+           
             }
             
             else
             {
                 UiElementsBinding.TargetListBox!.Items.Clear();
-                new LoadElementsIntoList(curedTargetPath, UiElementsBinding.TargetListBox);
+                new LoadElementsIntoList(curedTargetPath, UiElementsBinding.TargetListBox,false);
 
             }
             
@@ -123,7 +127,7 @@ public partial class MainWindow : Window
         
     }
 
-    private void SourceSearchBox_OnTextChanged(object? sender, TextChangedEventArgs e)
+    private void  SourceSearchBox_OnTextChanged(object? sender, TextChangedEventArgs e)
     {
         var curedSourcePath = UiElementsBinding.SourcePathBox!.Text!;
         var selectedTextBox = (TextBox)sender!;
@@ -133,19 +137,23 @@ public partial class MainWindow : Window
 
             if (!string.IsNullOrEmpty(selectedTextBox.Text))
             {
-                var directoryInfos = DirectorySearch.GetDirectory(curedSourcePath,selectedTextBox.Text);
-                    
-                UiElementsBinding.SourceListBox!.Items.Clear();
-                foreach (var dir in directoryInfos)
+                var listBox = UiElementsBinding.SourceListBox;
+                
+                listBox!.Items.Clear();
+                
+                Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    UiElementsBinding.SourceListBox.Items.Add(new TargetFolderTab(dir));
-                }
-                    
+                    foreach (var item in DirectorySearch.SearchDirectory(curedSourcePath,selectedTextBox.Text))
+                    {
+                        listBox.Items.Add(new SourceFolderTab(item));
+                    }
+                });
+
             }
             else
             {
-                UiElementsBinding.TargetListBox!.Items.Clear();
-                new LoadElementsIntoList(curedSourcePath, UiElementsBinding.TargetListBox);
+                UiElementsBinding.SourceListBox!.Items.Clear();
+                new LoadElementsIntoList(curedSourcePath, UiElementsBinding.SourceListBox,false);
 
             }    
             

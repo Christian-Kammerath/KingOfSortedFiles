@@ -135,11 +135,7 @@ public class Sorting
         }
     }
 
-    private string SingleOrDefault(Func<object, bool> func)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public  DirectoryInfo IsNotPresentCreateTargetDirectory(string directoryPath)
     {
        return  Directory.Exists(directoryPath)
