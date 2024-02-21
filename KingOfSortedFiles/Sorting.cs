@@ -45,10 +45,10 @@ public class Sorting
             var sortCheckBoxOne = SortCheckBoxes!.SortOneCheckBoxList.SingleOrDefault(c => (bool)c.IsChecked!);
             var sortCheckBoxTwo = SortCheckBoxes!.SortTwoCheckBoxList.SingleOrDefault(c => (bool)c.IsChecked!);
 
-            Parallel.ForEach(SourceDirectoryPathList, dir =>
+            foreach(var dir in SourceDirectoryPathList)
             {
                 SortingTask(dir,sortCheckBoxOne,sortCheckBoxTwo);
-            });
+            }
             
         }
     }
@@ -135,11 +135,7 @@ public class Sorting
         }
     }
 
-    private string SingleOrDefault(Func<object, bool> func)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public  DirectoryInfo IsNotPresentCreateTargetDirectory(string directoryPath)
     {
        return  Directory.Exists(directoryPath)

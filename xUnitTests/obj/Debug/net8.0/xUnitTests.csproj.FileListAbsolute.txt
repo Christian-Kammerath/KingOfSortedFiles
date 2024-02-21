@@ -229,5 +229,4 @@
 /home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/obj/Debug/net8.0/xUnitTests.pdb
 /home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/obj/Debug/net8.0/xUnitTests.genruntimeconfig.cache
 /home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/obj/Debug/net8.0/ref/xUnitTests.dll
-/home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/bin/Debug/net8.0/GetFolder/main.py
 /home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/bin/Debug/net8.0/Python.Runtime.dll

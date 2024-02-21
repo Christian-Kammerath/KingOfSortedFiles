@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 
 using KingOfSortedFiles.UiElements;
@@ -13,10 +14,13 @@ public class LoadElementsIntoList
     private string Path { get; set; }
     private ListBox ListBoxTooLoaded { get; set; }
 
-    public LoadElementsIntoList(string path,ListBox listBoxTooLoaded)
+    private bool FirstCall { get; set; } = true;
+
+    public LoadElementsIntoList(string path,ListBox listBoxTooLoaded,bool firstCall)
     {
         Path = path;
         ListBoxTooLoaded = listBoxTooLoaded;
+        FirstCall = firstCall;
         
         ListBoxTooLoaded.Items.Clear();
         ReadStartPathFilesAndDirectory();
@@ -64,11 +68,23 @@ public class LoadElementsIntoList
             var driverList = new List<Drive>();
 
             if (isLinux)
+            {
                 driverList =  DriveInfoLinux.GetDrivesString()
                     .StringManipulator()
                     .CreateDriveList();
-            
+
+                if(FirstCall)
+                    Task.Run(() =>
+                    {
+                        DirectorySearch.ReadFolder("/");
+                        FirstCall = false;
+                    });
+                
+            }
+
             if (isWindows)
+            {
+                
                 driverList = DriveInfo.GetDrives().Select(d => new Drive()
                 { 
                     Name = d.Name,
@@ -77,6 +93,21 @@ public class LoadElementsIntoList
                     MountPoint = d.RootDirectory.FullName
                         
                 }).ToList();
+
+                if (FirstCall)
+                {
+                    foreach (var item in driverList)
+                    {
+                        Task.Run(() =>
+                        {
+                            DirectorySearch.ReadFolder(item.MountPoint);
+                        });
+                    }
+
+                    FirstCall = false;
+                }
+                
+            }
             
             foreach (var item in driverList)
             {

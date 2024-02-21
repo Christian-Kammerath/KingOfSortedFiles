@@ -12,13 +12,13 @@ public class DriverTab : StackPanel
     {
         Spacing = 100;
 
-        var iconPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Drive.ico");
+        var iconPath = Path.Combine(Directory.GetCurrentDirectory(), "Icons", "Drive.ico");
         var icon = new Image() { Source = new Bitmap(iconPath), Width = 30, Height = 50, };
         
         icon.DoubleTapped += (sender, args) =>
         {
             var listBox = Parent as ListBox;
-            new LoadElementsIntoList(driveInfo.MountPoint, listBox!);
+            new LoadElementsIntoList(driveInfo.MountPoint, listBox!,false);
         };
 
         Orientation = Orientation.Horizontal;

@@ -44,12 +44,12 @@ public class FileTab : StackPanel
     {
         try
         {
-            return Path.Combine(Directory.GetCurrentDirectory(), "Assets","FileIcons", ExtensionIconDictionary[fileExtension]);
+            return Path.Combine(Directory.GetCurrentDirectory(), "Icons","FileIcons", ExtensionIconDictionary[fileExtension]);
 
         }
         catch (Exception e)
         {
-            return Path.Combine(Directory.GetCurrentDirectory(), "Assets","FileIcons", "PlaceHolder.ico");
+            return Path.Combine(Directory.GetCurrentDirectory(), "Icons","FileIcons", "PlaceHolder.ico");
 
         }
         

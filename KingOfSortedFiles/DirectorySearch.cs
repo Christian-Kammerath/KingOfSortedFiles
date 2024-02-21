@@ -1,60 +1,56 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+
 
 namespace KingOfSortedFiles;
 
 public static class DirectorySearch
 {
 
-    public static List<DirectoryInfo> GetDirectory(string path, string searchString = "null")
+    public static List<DirectoryInfo> DirectoryList { get; set; } = new();
+    public static void ReadFolder(string path)
     {
-        var scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "GetFolder", "main.py");
-        return RunScript(scriptPath, path, searchString);
-    }
-    
-    public static List<DirectoryInfo> RunScript(string scriptName,string path,string searchString)
-    {
-        var interpreter = Path.Combine(Directory.GetCurrentDirectory(),"GetFolder",".venv","bin","python3.11");
-        
-        Process pythonProcess = new Process();
-        ProcessStartInfo startInfo = new ProcessStartInfo
+        try
         {
-            FileName = interpreter,
-            Arguments = scriptName + " " + path + " " + searchString,  
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
 
-        pythonProcess.StartInfo = startInfo;
-        pythonProcess.Start();
+            var dirResult = Directory.GetDirectories(path).Select(d => new DirectoryInfo(d));
+            DirectoryList.AddRange(dirResult);
 
-
-        var output = pythonProcess.StandardOutput.ReadToEnd();
-        pythonProcess.WaitForExit();
-
-        var result = output.Split('\n');
-
-        var directoryList = new List<DirectoryInfo>();
-
-        foreach (var item in result)
-        {
-            try
+            
+            foreach (var dir in dirResult)
             {
-                var dir = new DirectoryInfo(item);
-                directoryList.Add(dir);
+                
+                ReadFolder(dir.FullName);
             }
-            catch (Exception)
-            {
-                continue;
-            }
+            
+
         }
-
-        return directoryList;
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        
     }
-   
 
+    public static List<DirectoryInfo> SearchDirectory(string path,string searchPattern)
+    {
+        try
+        {
+            var directoryListCopy = new List<DirectoryInfo>(DirectoryList);
+
+            var resultPath = directoryListCopy.Where(d => Regex.IsMatch(d.FullName, path));
+            var resultDirectory = resultPath.Where(d => Regex.IsMatch(d.Name.ToUpper(), searchPattern.ToUpper())).ToList();
+        
+            return resultDirectory;
+        }
+        catch (Exception e)
+        {
+            return SearchDirectory(path, searchPattern);
+        }
+       
+    }
 }
 
