@@ -35,22 +35,24 @@ public static class DirectorySearch
         
     }
 
-    public static List<DirectoryInfo> SearchDirectory(string path,string searchPattern)
+    public static List<DirectoryInfo> SearchDirectory(string path, string searchPattern)
     {
         try
         {
             var directoryListCopy = new List<DirectoryInfo>(DirectoryList);
 
-            var resultPath = directoryListCopy.Where(d => Regex.IsMatch(d.FullName, path));
+            var resultPath = directoryListCopy.Where(d => Regex.IsMatch(d.FullName, Regex.Escape(path)));
+
             var resultDirectory = resultPath.Where(d => Regex.IsMatch(d.Name.ToUpper(), searchPattern.ToUpper())).ToList();
-        
+
             return resultDirectory;
         }
         catch (Exception e)
         {
+            CustomLogSystem.Error(e.Message, false);
             return SearchDirectory(path, searchPattern);
         }
-       
     }
+
 }
 
