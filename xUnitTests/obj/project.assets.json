@@ -8927,19 +8927,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Chrsi\\.nuget\\packages\\": {}
+    "/home/chris/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Chrsi\\RiderProjects\\KingOfSortedFiles\\xUnitTests\\xUnitTests.csproj",
+      "projectUniqueName": "/home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/xUnitTests.csproj",
       "projectName": "xUnitTests",
-      "projectPath": "C:\\Users\\Chrsi\\RiderProjects\\KingOfSortedFiles\\xUnitTests\\xUnitTests.csproj",
-      "packagesPath": "C:\\Users\\Chrsi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Chrsi\\RiderProjects\\KingOfSortedFiles\\xUnitTests\\obj\\",
+      "projectPath": "/home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/xUnitTests.csproj",
+      "packagesPath": "/home/chris/.nuget/packages/",
+      "outputPath": "/home/chris/RiderProjects/KingOfSortedFiles/xUnitTests/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Chrsi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/chris/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -8951,8 +8951,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Chrsi\\RiderProjects\\KingOfSortedFiles\\KingOfSortedFiles\\KingOfSortedFiles.csproj": {
-              "projectPath": "C:\\Users\\Chrsi\\RiderProjects\\KingOfSortedFiles\\KingOfSortedFiles\\KingOfSortedFiles.csproj"
+            "/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/KingOfSortedFiles.csproj": {
+              "projectPath": "/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/KingOfSortedFiles.csproj"
             }
           }
         }
@@ -9004,7 +9004,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\Chrsi\\.dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

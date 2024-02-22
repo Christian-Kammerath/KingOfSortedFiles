@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using Avalonia.Controls;
+using KingOfSortedFiles.UiElements;
 using KingOfSortedFiles.Views;
 
 namespace KingOfSortedFiles;
@@ -23,7 +25,7 @@ public static class UiElementsBinding
     
     public static TextBox TargetSearchBox { get; set; } = null!;
 
-    
+    public static SortingProcessTab SortingProcessTab { get; set; } = null!;
     public static SortingSettings SortingSettings { get; set; }
 
     public static void BindUiElements(MainWindow mainWindow)

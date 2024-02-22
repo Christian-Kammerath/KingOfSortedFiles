@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 
@@ -39,9 +40,12 @@ public static class DirectorySearch
     {
         try
         {
+            
+            var regexString = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? Regex.Escape(path) : path;
+            
             var directoryListCopy = new List<DirectoryInfo>(DirectoryList);
 
-            var resultPath = directoryListCopy.Where(d => Regex.IsMatch(d.FullName, Regex.Escape(path)));
+            var resultPath = directoryListCopy.Where(d => Regex.IsMatch(d.FullName, regexString ));
 
             var resultDirectory = resultPath.Where(d => Regex.IsMatch(d.Name.ToUpper(), searchPattern.ToUpper())).ToList();
 

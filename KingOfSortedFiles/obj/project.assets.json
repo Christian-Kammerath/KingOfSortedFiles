@@ -5309,19 +5309,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Chrsi\\.nuget\\packages\\": {}
+    "/home/chris/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Chrsi\\RiderProjects\\KingOfSortedFiles\\KingOfSortedFiles\\KingOfSortedFiles.csproj",
+      "projectUniqueName": "/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/KingOfSortedFiles.csproj",
       "projectName": "KingOfSortedFiles",
-      "projectPath": "C:\\Users\\Chrsi\\RiderProjects\\KingOfSortedFiles\\KingOfSortedFiles\\KingOfSortedFiles.csproj",
-      "packagesPath": "C:\\Users\\Chrsi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Chrsi\\RiderProjects\\KingOfSortedFiles\\KingOfSortedFiles\\obj\\",
+      "projectPath": "/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/KingOfSortedFiles.csproj",
+      "packagesPath": "/home/chris/.nuget/packages/",
+      "outputPath": "/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Chrsi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/chris/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -5398,7 +5398,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\Chrsi\\.dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

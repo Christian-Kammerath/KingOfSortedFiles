@@ -146,15 +146,17 @@ public class SettingsShow : StackPanel
 
 public class StartStopAndProgress : StackPanel
 {
-    private ProgressBar ProgressBar { get; set; }
+    public ProgressBar ProgressBar { get; set; }
 
     public StartStopAndProgress()
     {
         Orientation = Orientation.Horizontal;
         
+        
         ProgressBar = new (){Minimum = 0,
-            Maximum = 100,VerticalAlignment = VerticalAlignment.Center,
-            HorizontalAlignment = HorizontalAlignment.Left};
+            Maximum = 100,VerticalAlignment = VerticalAlignment.Stretch,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+        };
 
         var startButton = new Button() { Content = "Start", Background = Brushes.Green,HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center};
@@ -163,21 +165,17 @@ public class StartStopAndProgress : StackPanel
             new Sorting(UiElementsBinding.SortingSettings).StartSorting();
         };
         
+        
         Children.Add(ProgressBar);
         Children.Add(startButton);
         
     }
-
-    public void SetProgressValue(double value)
-    {
-        ProgressBar.Value = value;
-    }
-
-
+    
 }
 
 public class SortingProcessTab : StackPanel
 {
+    public StartStopAndProgress StartStopAndProgress { get; set; }
     public SortingProcessTab()
     {
         var logListBox = UiElementsBinding.LogListBox!;
@@ -187,10 +185,13 @@ public class SortingProcessTab : StackPanel
 
        
         logListBox.Items.Remove(lastSortingProcessTab);
+
+        var settings = new SettingsShow();
+        StartStopAndProgress = new StartStopAndProgress();
         
-        Children.Add(new SettingsShow());
-        Children.Add(new StartStopAndProgress());
-        
+        Children.Add(settings);
+        Children.Add(StartStopAndProgress);
+        UiElementsBinding.SortingProcessTab = this;
     }
     
 }

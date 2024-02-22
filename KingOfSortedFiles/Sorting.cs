@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 
 namespace KingOfSortedFiles;
@@ -45,9 +44,13 @@ public class Sorting
             var sortCheckBoxOne = SortCheckBoxes!.SortOneCheckBoxList.SingleOrDefault(c => (bool)c.IsChecked!);
             var sortCheckBoxTwo = SortCheckBoxes!.SortTwoCheckBoxList.SingleOrDefault(c => (bool)c.IsChecked!);
 
+            var counter = 0;
             foreach(var dir in SourceDirectoryPathList)
             {
                 SortingTask(dir,sortCheckBoxOne,sortCheckBoxTwo);
+                counter++;
+                UiElementsBinding.SortingProcessTab.StartStopAndProgress.ProgressBar.Value =
+                    counter / SourceDirectoryPathList.Count * 100;
             }
             
         }
