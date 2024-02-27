@@ -11,10 +11,12 @@ public class ProgramStartRoutine
     public ProgramStartRoutine()
     {
         
+        //executes Read Json Settings to read the settings from the appSettings.json
         CustomLogSystem.Debug("Read appSettings.json",false);
         ReadJsonSettings();
         CustomLogSystem.Debug("Read appSettings.json finish",false);
         
+        //
         CustomLogSystem.Debug("Load File Extensions In ListBox",false);
         LoadFileExtensionsInListBox();
         CustomLogSystem.Debug("Load File Extensions In ListBox finish",false);
@@ -25,6 +27,7 @@ public class ProgramStartRoutine
         
     }
 
+    //Reads and maps the settings from appSettings.json
     private void ReadJsonSettings()
     {
         IConfigurationRoot builder = new ConfigurationBuilder()
@@ -36,6 +39,7 @@ public class ProgramStartRoutine
 
     }
 
+    //creates tabs with file extensions for the settings in the UI from the app settings
     private void LoadFileExtensionsInListBox()
     {
        

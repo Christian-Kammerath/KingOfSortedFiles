@@ -1,4 +1,6 @@
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -8,18 +10,33 @@ namespace KingOfSortedFiles.Views;
 
 public partial class MainWindow : Window
 {
+    public CancellationTokenSource CancelTokenSource = new();
+    public CancellationTokenSource CancelTokenTarget = new();
+
+
+    private Task SearchTaskSource = new(()=>{});
+    private Task SearchTaskTarget = new(()=>{});
+
+    // initial Window
     public MainWindow()
     {
         
         InitializeComponent();
 
+        //creates a log system with file in bin folder
         CustomLogSystem
             .BindListBox(this.Find<ListBox>("LogListBox"))
             .BindLogFile(Path.Combine(Directory.GetCurrentDirectory(),"Log.txt"));
         
         CustomLogSystem.Debug("Start ProgramStartRoutine",false);
+        
+        //binds mainwindow
         UiElementsBinding.BindUiElements(this);
+        
+        //Starts the start rotines
         new ProgramStartRoutine();
+        
+        
         CustomLogSystem.Debug("ProgramStartRoutine finish",false);
 
         
@@ -102,17 +119,25 @@ public partial class MainWindow : Window
         {
             if (!string.IsNullOrEmpty(selectedTextBox.Text))
             {
-                var listBox = UiElementsBinding.TargetListBox;
-                listBox!.Items.Clear();
+                
+                var searchText = selectedTextBox.Text;
+                DirectorySearch.SearchString = searchText;
 
-                Dispatcher.UIThread.InvokeAsync(() =>
+                
+                if (SearchTaskTarget.Status != TaskStatus.RanToCompletion)
                 {
-                    foreach (var item in DirectorySearch.SearchDirectory(curedTargetPath,selectedTextBox.Text))
-                    {
-                        listBox.Items.Add(new TargetFolderTab(item));
-                    }
-                });
+                    var listBox = UiElementsBinding.TargetListBox!;
+                    listBox.Items.Clear();
 
+                    var token = CancelTokenTarget.Token;
+                    
+                    SearchTaskTarget = new Task(async () =>
+                    {
+                        await DirectorySearch.ReadFolder(curedTargetPath,false,listBox,token);
+                    },CancelTokenTarget.Token);
+                    
+                    SearchTaskTarget.Start();
+                }
            
             }
             
@@ -129,31 +154,41 @@ public partial class MainWindow : Window
 
     private void  SourceSearchBox_OnTextChanged(object? sender, TextChangedEventArgs e)
     {
-        var curedSourcePath = UiElementsBinding.SourcePathBox!.Text!;
+        var curedSourcePath = UiElementsBinding.SourcePathBox?.Text;
         var selectedTextBox = (TextBox)sender!;
         
         if(!string.IsNullOrEmpty(curedSourcePath))
         {
-
+            
             if (!string.IsNullOrEmpty(selectedTextBox.Text))
             {
-                var listBox = UiElementsBinding.SourceListBox;
                 
-                listBox!.Items.Clear();
-                
-                Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    foreach (var item in DirectorySearch.SearchDirectory(curedSourcePath,selectedTextBox.Text))
-                    {
-                        listBox.Items.Add(new SourceFolderTab(item));
-                    }
-                });
+                var searchText = selectedTextBox.Text;
+                DirectorySearch.SearchString = searchText;
 
+                
+                if (SearchTaskSource.Status != TaskStatus.RanToCompletion)
+                {
+                    var listBox = UiElementsBinding.SourceListBox!;
+                    listBox.Items.Clear();
+
+                    var token = CancelTokenSource.Token;
+                    
+                    CustomLogSystem.Informational($"Directory search running: {listBox.Name}",true);
+                    
+                    SearchTaskSource = new Task(async () =>
+                    {
+                        await DirectorySearch.ReadFolder(curedSourcePath,true,listBox,token);
+                    },CancelTokenSource.Token);
+                    
+                    SearchTaskSource.Start();
+                }
+                
             }
             else
             {
-                UiElementsBinding.SourceListBox!.Items.Clear();
-                new LoadElementsIntoList(curedSourcePath, UiElementsBinding.SourceListBox,false);
+                UiElementsBinding.SourceListBox?.Items.Clear();
+                new LoadElementsIntoList(curedSourcePath, UiElementsBinding.SourceListBox!,false);
 
             }    
             

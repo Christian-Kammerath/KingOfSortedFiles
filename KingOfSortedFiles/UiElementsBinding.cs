@@ -1,8 +1,11 @@
+using System.Diagnostics;
 using Avalonia.Controls;
+using KingOfSortedFiles.UiElements;
 using KingOfSortedFiles.Views;
 
 namespace KingOfSortedFiles;
 
+//Binds UI elements for better access
 public static class UiElementsBinding
 {
     public static ListBox? SourceListBox { get; set; }
@@ -23,9 +26,10 @@ public static class UiElementsBinding
     
     public static TextBox TargetSearchBox { get; set; } = null!;
 
-    
+    public static SortingProcessTab SortingProcessTab { get; set; } = null!;
     public static SortingSettings SortingSettings { get; set; }
 
+    public static MainWindow MainWindowReference { get; set; }
     public static void BindUiElements(MainWindow mainWindow)
     {
         SourceListBox = mainWindow.Find<ListBox>("SourceListBox");
@@ -38,7 +42,7 @@ public static class UiElementsBinding
         LogListBox = mainWindow.Find<ListBox>("LogListBox");
         SourceSearchBox = mainWindow.Find<TextBox>("SourceSearchBox")!;
         TargetSearchBox = mainWindow.Find<TextBox>("TargetSearchBox")!;
-        
+        MainWindowReference = mainWindow;
         
         LoadCheckBoxesToSettings(mainWindow);
         LoadCopyAndOrMoveCheckBoxes(mainWindow);
