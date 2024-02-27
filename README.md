@@ -7,7 +7,7 @@ Software under development to automatically search and sort files
 Instruction
 
 1. Select whether to search for files using search tags or and file endings.
-2. If necessary, click on the corresponding file endings (additional file endings can also be added via the New button).
+2. If necessary, click on the corresponding file endings (additional file endings can also be added via the Settings button).
 3. Choose one or two sorting parameters, for example sort by tag name and in the subfolder by creation date.
 4. decide if you just want to move the files or if you want to copy them and then move the copy.
 5. If you use search terms (search Tag) for sorting or searching, you must add at least one.
