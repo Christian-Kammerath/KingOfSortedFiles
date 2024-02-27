@@ -153,11 +153,11 @@ public class Sorting
         {
             true when !isFileExtensions => Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories)
                 .Select(f => new FileInfo(f))
-                .Where(f => Regex.IsMatch(f.Name, string.Join("||", SearchTagList)))
+                .Where(f => Regex.IsMatch(f.Name.ToLower(), string.Join("||", SearchTagList).ToLower()))
                 .ToList(),
             true when isFileExtensions => Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories)
                 .Select(f => new FileInfo(f))
-                .Where(f => Regex.IsMatch(f.Name, string.Join("||", SearchTagList)) &&
+                .Where(f => Regex.IsMatch(f.Name.ToLower(), string.Join("||", SearchTagList).ToLower()) &&
                             FileExtensionFilterList.Contains(f.Extension))
                 .ToList(),
             false when isFileExtensions => (Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories)
