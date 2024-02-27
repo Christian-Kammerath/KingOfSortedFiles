@@ -82,7 +82,9 @@ public partial class MainWindow : Window
         if (searchTagString != "Add new Search Tag" &&
             !string.IsNullOrEmpty(searchTagString))
         {
-            UiElementsBinding.SearchTagListBox!.Items.Add(new SearchTagTab(searchTagString));
+            var listBox = UiElementsBinding.SearchTagListBox;
+            listBox!.Items.Add(new SearchTagTab(searchTagString));
+            UiElementsBinding.SortingSettings.SearchTagList = new SearchTags(listBox!);
             UiElementsBinding.LogListBox!.Items.Add(new SortingProcessTab());
         }
     }
