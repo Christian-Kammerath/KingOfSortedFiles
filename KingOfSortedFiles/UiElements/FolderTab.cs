@@ -1,8 +1,11 @@
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using KingOfSortedFiles.Views;
 
 namespace KingOfSortedFiles.UiElements;
 
@@ -11,7 +14,7 @@ public class TargetFolderTab : StackPanel
     public string FolderName { get; set; }
     public string FolderPath { get; set; }
 
-    public TargetFolderTab(DirectoryInfo directoryInfo)
+    public TargetFolderTab(DirectoryInfo directoryInfo,bool isSource)
     {
 
         FolderName = directoryInfo.Name;
@@ -24,6 +27,16 @@ public class TargetFolderTab : StackPanel
         
         icon.DoubleTapped += (sender, args) =>
         {
+            if (isSource)
+            {
+                UiElementsBinding.MainWindowReference.CancelTokenSource.Cancel();
+                UiElementsBinding.MainWindowReference.CancelTokenSource.Dispose();
+            }
+            else
+            {
+                UiElementsBinding.MainWindowReference.CancelTokenTarget.Cancel();
+            }
+            
             var listBox = Parent as ListBox;
             new LoadElementsIntoList(FolderPath, listBox!,false);
         };
@@ -46,7 +59,7 @@ public class TargetFolderTab : StackPanel
 
 public class SourceFolderTab : TargetFolderTab
 {
-    public SourceFolderTab(DirectoryInfo directoryInfo) : base(directoryInfo)
+    public SourceFolderTab(DirectoryInfo directoryInfo, bool isSource) : base(directoryInfo,isSource)
     {
         var checkBoxStack = new StackPanel(){Orientation = Orientation.Horizontal};
         var selectCheckBox = new CheckBox() { Tag = FolderPath, VerticalAlignment = VerticalAlignment.Center };

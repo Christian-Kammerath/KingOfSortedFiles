@@ -1,62 +1,103 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Threading;
+using KingOfSortedFiles.UiElements;
 
 
 namespace KingOfSortedFiles;
 
 public static class DirectorySearch
 {
+    public static string SearchString { get; set; }
+    private static bool SearchIsRunning = true;
 
-    public static List<DirectoryInfo> DirectoryList { get; set; } = new();
-    public static void ReadFolder(string path)
+    public static async Task ReadFolder(string path, bool isSource, ListBox listBox, CancellationToken token)
     {
         try
         {
-
-            var dirResult = Directory.GetDirectories(path).Select(d => new DirectoryInfo(d));
-            DirectoryList.AddRange(dirResult);
-
             
-            foreach (var dir in dirResult)
+            if (token.IsCancellationRequested)
             {
+                if (SearchIsRunning)
+                {
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        CustomLogSystem.Informational($"Directory search ended: {listBox.Name}", true);
+                        SearchIsRunning = false;
+                    });
+                    
+                }
                 
-                ReadFolder(dir.FullName);
+                token.ThrowIfCancellationRequested();
+                
             }
             
+            var dir = Directory.GetDirectories(path).ToList();
+            
+            for(int i = 0; i < dir.Count; i++)
+            {
+                var folderFirst = new DirectoryInfo(dir[i]);
+                
+                if (
+                    (folderFirst.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden ||
+                    (folderFirst.Attributes & FileAttributes.System) == FileAttributes.System ||
+                    (folderFirst.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
+                {
+                    continue;
+                }
+                
+                if (Regex.IsMatch(folderFirst.Name.ToUpper(), SearchString.ToUpper()))
+                {
+                    await LoadInListBoxAsync(listBox,folderFirst,isSource);
+                }
 
+                await CleanListAsync(listBox,isSource);
+                await ReadFolder(folderFirst.FullName, isSource, listBox,token);
+                
+            }
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            await CleanListAsync(listBox,isSource);
         }
-        
     }
 
-    public static List<DirectoryInfo> SearchDirectory(string path, string searchPattern)
+    public static async Task LoadInListBoxAsync(ListBox listBox, DirectoryInfo directoryInfo, bool isSource)
     {
-        try
+        await Dispatcher.UIThread.InvokeAsync(() =>
         {
-            
-            var regexString = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? Regex.Escape(path) : path;
-            
-            var directoryListCopy = new List<DirectoryInfo>(DirectoryList);
-
-            var resultPath = directoryListCopy.Where(d => Regex.IsMatch(d.FullName, regexString ));
-
-            var resultDirectory = resultPath.Where(d => Regex.IsMatch(d.Name.ToUpper(), searchPattern.ToUpper())).ToList();
-
-            return resultDirectory;
-        }
-        catch (Exception e)
-        {
-            CustomLogSystem.Error(e.Message, false);
-            return SearchDirectory(path, searchPattern);
-        }
+            var folderTab = isSource ? new SourceFolderTab(directoryInfo,true): new TargetFolderTab(directoryInfo,false);
+            listBox.Items.Add(folderTab);
+        });
     }
 
+    public static async Task CleanListAsync(ListBox listBox, bool isSource)
+    {
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            var searchText = UiElementsBinding.SourceSearchBox.Text;
+            
+            var folderTabType = isSource ? typeof(SourceFolderTab) : typeof(TargetFolderTab);
+
+            var itemsToRemove = listBox.Items
+                .Cast<object>() 
+                .Where(d => d.GetType() == folderTabType && !Regex.IsMatch(((dynamic)d).FolderName.ToUpper(), searchText!.ToUpper()))
+                .ToList();
+
+
+            foreach (var itemToRemove in itemsToRemove)
+            {
+                listBox.Items.Remove(itemToRemove);
+            }
+        });
+    }
 }
+
+    
+
 

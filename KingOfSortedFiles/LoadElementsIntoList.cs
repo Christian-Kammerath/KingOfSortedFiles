@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,13 +15,11 @@ public class LoadElementsIntoList
     private string Path { get; set; }
     private ListBox ListBoxTooLoaded { get; set; }
 
-    private bool FirstCall { get; set; } = true;
 
     public LoadElementsIntoList(string path,ListBox listBoxTooLoaded,bool firstCall)
     {
         Path = path;
         ListBoxTooLoaded = listBoxTooLoaded;
-        FirstCall = firstCall;
         
         ListBoxTooLoaded.Items.Clear();
         ReadStartPathFilesAndDirectory();
@@ -34,25 +33,40 @@ public class LoadElementsIntoList
 
     private void LoadFolders()
     {
-        var folderInPath = Directory.GetDirectories(Path)
-            .Select(f => new DirectoryInfo(f));
-
-        foreach (var folder in folderInPath)
+        try
         {
-            ListBoxTooLoaded.Items.Add(ListBoxTooLoaded.Name == "SourceListBox"
-                ? new SourceFolderTab(folder)
-                : new TargetFolderTab(folder) );
+            var folderInPath = Directory.GetDirectories(Path)
+                .Select(f => new DirectoryInfo(f));
+
+            foreach (var folder in folderInPath)
+            {
+                ListBoxTooLoaded.Items.Add(ListBoxTooLoaded.Name == "SourceListBox"
+                    ? new SourceFolderTab(folder,true)
+                    : new TargetFolderTab(folder,false) );
+            }
         }
+        catch (UnauthorizedAccessException e)
+        {
+            CustomLogSystem.Error(e.Message,true);
+        }
+       
     }
 
     private void LoadFiles()
     {
-        var filesInPath = Directory.GetFiles(Path)
-            .Select(f => new FileInfo(f));
-
-        foreach (var files in filesInPath)
+        try
         {
-            ListBoxTooLoaded.Items.Add(new FileTab(files));
+            var filesInPath = Directory.GetFiles(Path)
+                .Select(f => new FileInfo(f));
+
+            foreach (var files in filesInPath)
+            {
+                ListBoxTooLoaded.Items.Add(new FileTab(files));
+            }
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            CustomLogSystem.Error(e.Message,true);
         }
         
     }
@@ -72,13 +86,6 @@ public class LoadElementsIntoList
                 driverList =  DriveInfoLinux.GetDrivesString()
                     .StringManipulator()
                     .CreateDriveList();
-
-                if(FirstCall)
-                    Task.Run(() =>
-                    {
-                        DirectorySearch.ReadFolder("/");
-                        FirstCall = false;
-                    });
                 
             }
 
@@ -93,19 +100,6 @@ public class LoadElementsIntoList
                     MountPoint = d.RootDirectory.FullName
                         
                 }).ToList();
-
-                if (FirstCall)
-                {
-                    foreach (var item in driverList)
-                    {
-                        Task.Run(() =>
-                        {
-                            DirectorySearch.ReadFolder(item.MountPoint);
-                        });
-                    }
-
-                    FirstCall = false;
-                }
                 
             }
             
