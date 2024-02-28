@@ -13,3 +13,8 @@ Instruction
 5. If you use search terms (search Tag) for sorting or searching, you must add at least one.
 6. select a source folder by clicking on the checkbox you can also select multiple folders.
 7. select a destination folder by clicking on the corresponding tab, only one destination folder can be selected at a time.
+
+Note: The program is functional, but there might be some unknown bugs.
+
+Known problems:
+1. the simultaneous search for folders in the source and target ListBox, leads to staker delay. 
