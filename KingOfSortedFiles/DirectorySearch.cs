@@ -11,12 +11,12 @@ using KingOfSortedFiles.UiElements;
 
 namespace KingOfSortedFiles;
 
-public static class DirectorySearch
+public  class DirectorySearch
 {
-    public static string SearchString { get; set; }
-    private static bool SearchIsRunning = true;
+    public  string SearchString { get; set; }
+    private  bool SearchIsRunning = true;
 
-    public static async Task ReadFolder(string path, bool isSource, ListBox listBox, CancellationToken token)
+    public  async Task ReadFolder(string path, bool isSource, ListBox listBox, CancellationToken token)
     {
         try
         {
@@ -67,7 +67,7 @@ public static class DirectorySearch
         }
     }
 
-    public static async Task LoadInListBoxAsync(ListBox listBox, DirectoryInfo directoryInfo, bool isSource)
+    public  async Task LoadInListBoxAsync(ListBox listBox, DirectoryInfo directoryInfo, bool isSource)
     {
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
@@ -76,7 +76,7 @@ public static class DirectorySearch
         });
     }
 
-    public static async Task CleanListAsync(ListBox listBox, bool isSource)
+    public  async Task CleanListAsync(ListBox listBox, bool isSource)
     {
         await Dispatcher.UIThread.InvokeAsync(() =>
         {

@@ -17,6 +17,9 @@ public partial class MainWindow : Window
     private Task SearchTaskSource = new(()=>{});
     private Task SearchTaskTarget = new(()=>{});
 
+    private DirectorySearch SourceDirectorySearch { get; set; } = new();
+    private DirectorySearch TargetDirectorySearch { get; set; } = new();
+
     // initial Window
     public MainWindow()
     {
@@ -44,6 +47,7 @@ public partial class MainWindow : Window
         
     }
 
+    //If the path in the TextBox changes, the content in the folder is determined and loaded into the list
     private void SourcePathBox_OnTextChanged(object? sender, TextChangedEventArgs e)
     {
         var sourcePathBox = UiElementsBinding.SourcePathBox;
@@ -59,6 +63,7 @@ public partial class MainWindow : Window
 
     }
 
+    //    //If the path in the TextBox changes, the content in the folder is determined and loaded into the list
     private void TargetPathBox_OnTextChanged(object? sender, TextChangedEventArgs e)
     {
         var targetPathBox = UiElementsBinding.TargetPathBox;
@@ -74,6 +79,7 @@ public partial class MainWindow : Window
             
     }
 
+    //Adds a new SearchTag
     private void AddNewSearchTagButton_OnClick(object? sender, RoutedEventArgs e)
     {
 
@@ -89,6 +95,7 @@ public partial class MainWindow : Window
         }
     }
 
+    //Adds the selected destination folder to the sortingSettings.
     private void TargetListBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         var selectedItem = UiElementsBinding.TargetListBox!.SelectedItem;
@@ -106,24 +113,29 @@ public partial class MainWindow : Window
         
     }
 
+    //opens the settings file and saves changes
     private void OpensSettingFile_OnClick(object? sender, RoutedEventArgs e)
     {
         OpensSettingsFile.OpenFile(Path.Combine(Directory.GetCurrentDirectory(),"appSettings.json"));
     }
 
 
+    //searches for hits with regex when entering changes to folders in the current directory
     private void TargetSearchBox_OnTextChanged(object? sender, TextChangedEventArgs e)
     {
+        //loads the target ListBox and the search TextBox 
         var curedTargetPath = UiElementsBinding.TargetPathBox!.Text!;
         var selectedTextBox = (TextBox)sender!;
         
+        //checks whether the current path is empty
         if(!string.IsNullOrEmpty(curedTargetPath))
         {
+            //checks whether the text from the Search Box is empty, if so the ListBox is loaded and the elements from the current path are loaded into the ListBox
             if (!string.IsNullOrEmpty(selectedTextBox.Text))
             {
-                
+                //reads the text from the search TextBox and passes the search string to the  DirectorySearcher class
                 var searchText = selectedTextBox.Text;
-                DirectorySearch.SearchString = searchText;
+                TargetDirectorySearch.SearchString = searchText;
 
                 
                 if (SearchTaskTarget.Status != TaskStatus.RanToCompletion)
@@ -131,11 +143,13 @@ public partial class MainWindow : Window
                     var listBox = UiElementsBinding.TargetListBox!;
                     listBox.Items.Clear();
 
+                    CustomLogSystem.Informational($"Directory search running: {listBox.Name}",true);
+
                     var token = CancelTokenTarget.Token;
                     
                     SearchTaskTarget = new Task(async () =>
                     {
-                        await DirectorySearch.ReadFolder(curedTargetPath,false,listBox,token);
+                        await TargetDirectorySearch.ReadFolder(curedTargetPath,false,listBox,token);
                     },CancelTokenTarget.Token);
                     
                     SearchTaskTarget.Start();
@@ -166,7 +180,7 @@ public partial class MainWindow : Window
             {
                 
                 var searchText = selectedTextBox.Text;
-                DirectorySearch.SearchString = searchText;
+                SourceDirectorySearch.SearchString = searchText;
 
                 
                 if (SearchTaskSource.Status != TaskStatus.RanToCompletion)
@@ -180,7 +194,7 @@ public partial class MainWindow : Window
                     
                     SearchTaskSource = new Task(async () =>
                     {
-                        await DirectorySearch.ReadFolder(curedSourcePath,true,listBox,token);
+                        await SourceDirectorySearch.ReadFolder(curedSourcePath,true,listBox,token);
                     },CancelTokenSource.Token);
                     
                     SearchTaskSource.Start();
