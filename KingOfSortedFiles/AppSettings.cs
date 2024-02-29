@@ -1,5 +1,6 @@
 namespace KingOfSortedFiles;
 
+//defines the settings class for automapping from the appSettings.json file
 public class AppSettings
 {
     public FileExtensions FileExtensions { get; set; } = null!;

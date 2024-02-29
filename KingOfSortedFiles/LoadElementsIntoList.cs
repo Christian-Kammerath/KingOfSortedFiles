@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 
 using KingOfSortedFiles.UiElements;
 
 namespace KingOfSortedFiles;
 
+//Reads folders, hard drives and files on demand
 public class LoadElementsIntoList
 {
     private string Path { get; set; }
@@ -31,6 +31,7 @@ public class LoadElementsIntoList
 
     }
 
+    //Loads directories located in the subdirectory of the current path into a ListBox
     private void LoadFolders()
     {
         try
@@ -51,7 +52,8 @@ public class LoadElementsIntoList
         }
        
     }
-
+    
+    //Loads files located in the subdirectory of the current path into a ListBox
     private void LoadFiles()
     {
         try
@@ -71,6 +73,7 @@ public class LoadElementsIntoList
         
     }
     
+    //If the path is empty, a list of hard disks is loaded, otherwise the directories and files in the subfolder of the path are loaded.
     private void ReadStartPathFilesAndDirectory()
     {   
         if (string.IsNullOrEmpty(Path))

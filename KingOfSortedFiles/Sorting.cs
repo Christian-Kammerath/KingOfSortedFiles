@@ -38,16 +38,21 @@ public class Sorting
 
     public void StartSorting()
     {
+        //Checks whether the settings made are valid
         if (CheckWhetherTheSettingsAreValid())
         {
 
+            //determines the selected sorting parameters
             var sortCheckBoxOne = SortCheckBoxes!.SortOneCheckBoxList.SingleOrDefault(c => (bool)c.IsChecked!);
             var sortCheckBoxTwo = SortCheckBoxes!.SortTwoCheckBoxList.SingleOrDefault(c => (bool)c.IsChecked!);
 
+            //runs through the selected source directories
             var counter = 0;
             foreach(var dir in SourceDirectoryPathList)
             {
                 SortingTask(dir,sortCheckBoxOne,sortCheckBoxTwo);
+                
+                //determines the prescrit and passes it to the processBar
                 counter++;
                 UiElementsBinding.SortingProcessTab.StartStopAndProgress.ProgressBar.Value =
                     counter / SourceDirectoryPathList.Count * 100;
@@ -56,12 +61,12 @@ public class Sorting
         }
     }
 
+    
+    //Reads all files from the path and controls the sorting
     public  void SortingTask(string path , CheckBox? sortCheckBoxOne, CheckBox? sortCheckBoxTwo  )
     {
         
         var allFiles = GetAllFiles(IsFileExtension,IsSearchTags,path);
-        
-        
         
         if ((bool)sortCheckBoxOne!.IsChecked! && 
             sortCheckBoxTwo == null)
@@ -95,13 +100,24 @@ public class Sorting
         
     }
 
+    //moves or copies and then moves the files
     private void MoveFile(FileInfo file, string targetDirectoryPath, bool moveOnly)
     {
-        
+        //checks if target directory exists, if not it will be created
         var newTargetDirectory =  IsNotPresentCreateTargetDirectory(targetDirectoryPath);
-                
+        
+        //Checks whether to move or copy
+        //if the file name already exists in the destination, a copy with a different name is created
         if(moveOnly)
-            File.Move(newTargetDirectory.FullName,file.FullName);
+            try
+            {
+                File.Move(newTargetDirectory.FullName,file.FullName);
+            }
+            catch (Exception e)
+            {
+                var newFileName = file.Name + $"-CopyId({new Random().Next(1000,10000)})";
+                File.Move(  file.FullName,Path.Combine( newTargetDirectory.FullName,newFileName) );
+            }
         else
         {
             try
@@ -116,6 +132,7 @@ public class Sorting
         }
     }
 
+    //creates the destination paths
     public string CreateTargetDirectoryPath(FileInfo fileInfo, string targetDirectoryPath,CheckBox? sortingCheckBox)
     {
         switch ((string)sortingCheckBox!.Tag!)
@@ -138,7 +155,8 @@ public class Sorting
         }
     }
 
-    
+    // checks if target directory exists, if not it will be created
+
     public  DirectoryInfo IsNotPresentCreateTargetDirectory(string directoryPath)
     {
        return  Directory.Exists(directoryPath)
@@ -147,6 +165,7 @@ public class Sorting
 
     }
 
+    //searches for the appropriate files based on the settings and returns them
     public List<FileInfo> GetAllFiles(bool isFileExtensions, bool isSearchTags,string sourcePath)
     {
         return isSearchTags switch
@@ -168,6 +187,7 @@ public class Sorting
         };
     }
 
+    //Check whether the settings made are valid, if not, corresponding notes are displayed in the log ListBox
     private bool CheckWhetherTheSettingsAreValid()
     {
 

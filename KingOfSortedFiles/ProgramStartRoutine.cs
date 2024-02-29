@@ -16,7 +16,7 @@ public class ProgramStartRoutine
         ReadJsonSettings();
         CustomLogSystem.Debug("Read appSettings.json finish",false);
         
-        //
+        //loads the file extensions from the appSettings.json into the corresponding LisBox
         CustomLogSystem.Debug("Load File Extensions In ListBox",false);
         LoadFileExtensionsInListBox();
         CustomLogSystem.Debug("Load File Extensions In ListBox finish",false);

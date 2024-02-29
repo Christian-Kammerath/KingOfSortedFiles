@@ -5,12 +5,13 @@ using Avalonia.Media;
 
 namespace KingOfSortedFiles;
 
-
+//A class to write a logfile, as well as the possibility to output logs in the Ui
 public class LogSystemSettings
 {
     private  ListBox? _logListBox  = null!;
     private  FileInfo _logFile  = null!;
 
+    //sets the listbox as LogListbox as well as the logfile
     public ListBox? LogListBox
     {
         get
@@ -39,6 +40,7 @@ public class LogSystemSettings
     }
 }
 
+//A TexBlock for error logs with red background
 public class ErrorLogTab : TextBlock
 {
     public ErrorLogTab(string message)
@@ -49,6 +51,7 @@ public class ErrorLogTab : TextBlock
     }
 }
 
+//A TexBlock for warning logs with a yellow background
 public class WarningLogTab: TextBlock
 {
     public WarningLogTab(string message)
@@ -59,6 +62,7 @@ public class WarningLogTab: TextBlock
     }
 }
 
+//A TexBlock for debug logs with a green background
 public class DebugLogTab : TextBlock
 {
     public DebugLogTab(string message)
@@ -69,6 +73,7 @@ public class DebugLogTab : TextBlock
     }
 }
 
+//A TexBlock for information logs without background
 public class InformationalLogTab : TextBlock
 {
     public InformationalLogTab(string message)
@@ -78,6 +83,7 @@ public class InformationalLogTab : TextBlock
     }
 }
 
+//class to write to the logfile as well as the optional output to the log ListBox
 public static class CustomLogSystem
 {
     private static readonly LogSystemSettings LogSystemSettings = new();

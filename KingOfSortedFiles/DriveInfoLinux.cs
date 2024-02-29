@@ -18,12 +18,13 @@ public class Drive
     public string MountPoint { get; set;} = null!;
 }
 
+//Reads the local hard drives
 public static class DriveInfoLinux
 {
     
     private static readonly string[] Patterns = { "\u251C\u2500", "\u2514\u2500","\u2502" };
 
-    
+    //creates objects from an array of strings from the elements drive and returns a list of them
     public static  List<Drive> CreateDriveList(this string[] array)
     {
         
@@ -50,6 +51,8 @@ public static class DriveInfoLinux
         
         return driverLinuxList;
     }
+    
+    //Processes the string and returns an array with the required information
     public static string[] StringManipulator(this string lsblkOutputString)
     {
        
@@ -62,6 +65,7 @@ public static class DriveInfoLinux
     }
 
     
+    //returns a string with the local hard drives
     public static string GetDrivesString()
     {
         var process = new Process();

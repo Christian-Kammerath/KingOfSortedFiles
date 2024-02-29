@@ -4,6 +4,8 @@ using KingOfSortedFiles.Views;
 
 namespace KingOfSortedFiles;
 
+
+//opens a new window that allows you to edit the settings file
 public static class OpensSettingsFile
 {
     private static SettingWindow? SettingWindow { get; set; }
@@ -31,6 +33,7 @@ public static class OpensSettingsFile
         
     }
 
+    //saves the changes
     public static void SaveFile(string filePath)
     {
         using (StreamWriter streamWriter = new StreamWriter(filePath))

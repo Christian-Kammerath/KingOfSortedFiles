@@ -11,6 +11,7 @@ using KingOfSortedFiles.UiElements;
 
 namespace KingOfSortedFiles;
 
+//classe for searching and outputting directories
 public  class DirectorySearch
 {
     public  string SearchString { get; set; }
@@ -20,7 +21,7 @@ public  class DirectorySearch
     {
         try
         {
-            
+            //checks whether the task has received an abort command
             if (token.IsCancellationRequested)
             {
                 if (SearchIsRunning)
@@ -37,11 +38,13 @@ public  class DirectorySearch
                 
             }
             
-            var dir = Directory.GetDirectories(path).ToList();
-            
-            for(int i = 0; i < dir.Count; i++)
+            //reads the directorys from the current path
+            var dirList = Directory.GetDirectories(path).ToList();
+
+            foreach (var dir in dirList)
             {
-                var folderFirst = new DirectoryInfo(dir[i]);
+                var folderFirst = new DirectoryInfo(dir);
+                
                 
                 if (
                     (folderFirst.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden ||
@@ -51,22 +54,28 @@ public  class DirectorySearch
                     continue;
                 }
                 
+                //If the name of the directory contains the search string, the result is loaded into the corresponding ListBox
                 if (Regex.IsMatch(folderFirst.Name.ToUpper(), SearchString.ToUpper()))
                 {
                     await LoadInListBoxAsync(listBox,folderFirst,isSource);
                 }
-
+                
+                //Deletes all old results from the listbox that no longer match the searchString
                 await CleanListAsync(listBox,isSource);
+                
+                //Calls the recursive function to search the subfolders
                 await ReadFolder(folderFirst.FullName, isSource, listBox,token);
                 
             }
         }
         catch (Exception e)
         {
+            //Deletes all old results from the listbox that no longer match the searchString
             await CleanListAsync(listBox,isSource);
         }
     }
 
+    //Loads directory into ListBox 
     public  async Task LoadInListBoxAsync(ListBox listBox, DirectoryInfo directoryInfo, bool isSource)
     {
         await Dispatcher.UIThread.InvokeAsync(() =>
@@ -76,6 +85,7 @@ public  class DirectorySearch
         });
     }
 
+    //Clears list box
     public  async Task CleanListAsync(ListBox listBox, bool isSource)
     {
         await Dispatcher.UIThread.InvokeAsync(() =>
