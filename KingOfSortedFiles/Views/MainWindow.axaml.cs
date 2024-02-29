@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
 using KingOfSortedFiles.UiElements;
 
 namespace KingOfSortedFiles.Views;
@@ -137,7 +136,7 @@ public partial class MainWindow : Window
                 var searchText = selectedTextBox.Text;
                 TargetDirectorySearch.SearchString = searchText;
 
-                
+                //check if a search is already running, if not a new task will be started
                 if (SearchTaskTarget.Status != TaskStatus.RanToCompletion)
                 {
                     var listBox = UiElementsBinding.TargetListBox!;
@@ -168,21 +167,27 @@ public partial class MainWindow : Window
         
     }
 
+    //searches for hits with regex when entering changes to folders in the current directory
+
     private void  SourceSearchBox_OnTextChanged(object? sender, TextChangedEventArgs e)
     {
+        //loads the source ListBox and the search TextBox 
+
         var curedSourcePath = UiElementsBinding.SourcePathBox?.Text;
         var selectedTextBox = (TextBox)sender!;
         
+        //checks whether the current path is empty
+
         if(!string.IsNullOrEmpty(curedSourcePath))
         {
-            
+            //checks whether the text from the Search Box is empty, if so the ListBox is loaded and the elements from the current path are loaded into the ListBox
             if (!string.IsNullOrEmpty(selectedTextBox.Text))
             {
-                
+                //reads the text from the search TextBox and passes the search string to the  DirectorySearcher class
                 var searchText = selectedTextBox.Text;
                 SourceDirectorySearch.SearchString = searchText;
 
-                
+                //check if a search is already running, if not a new task will be started
                 if (SearchTaskSource.Status != TaskStatus.RanToCompletion)
                 {
                     var listBox = UiElementsBinding.SourceListBox!;
