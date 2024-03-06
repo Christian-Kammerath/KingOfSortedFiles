@@ -111,7 +111,7 @@ public class SettingsShow : StackPanel
         });
             
                 
-        var sortingCheckBoxTwoListBox = new ListBox(){Height = 200, Width = 180};
+        var sortingCheckBoxTwoListBox = new ListBox(){Height = 200, Width = 200};
 
         sortingCheckBoxTwoListBox.Items.Add(new TextBlock() { Text = "[second sort folders by]"});
             
