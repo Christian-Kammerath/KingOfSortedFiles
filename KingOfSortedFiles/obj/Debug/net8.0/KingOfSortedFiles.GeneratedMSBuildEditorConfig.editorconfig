@@ -13,18 +13,18 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = KingOfSortedFiles
-build_property.ProjectDir = /home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/
+build_property.ProjectDir = C:\Users\Chrsi\RiderProjects\KingOfSortedFiles2\KingOfSortedFiles\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 
-[/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/App.axaml]
+[C:/Users/Chrsi/RiderProjects/KingOfSortedFiles2/KingOfSortedFiles/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/Styles1.axaml]
+[C:/Users/Chrsi/RiderProjects/KingOfSortedFiles2/KingOfSortedFiles/Styles1.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/Views/MainWindow.axaml]
+[C:/Users/Chrsi/RiderProjects/KingOfSortedFiles2/KingOfSortedFiles/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[/home/chris/RiderProjects/KingOfSortedFiles/KingOfSortedFiles/Views/SettingWindow.axaml]
+[C:/Users/Chrsi/RiderProjects/KingOfSortedFiles2/KingOfSortedFiles/Views/SettingWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

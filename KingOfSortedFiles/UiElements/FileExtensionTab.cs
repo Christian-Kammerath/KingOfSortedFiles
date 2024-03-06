@@ -41,7 +41,6 @@ public class FileExtensionTab : StackPanel
                 {
                     Tag = fileExtensionArray[i],
                     FontWeight = FontWeight.Bold,
-                    Foreground = Brushes.Azure
                 };
 
                 checkBox.IsCheckedChanged += (sender, args) =>

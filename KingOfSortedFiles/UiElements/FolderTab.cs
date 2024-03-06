@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -29,12 +30,28 @@ public class TargetFolderTab : StackPanel
         {
             if (isSource)
             {
-                UiElementsBinding.MainWindowReference.CancelTokenSource.Cancel();
-                UiElementsBinding.MainWindowReference.CancelTokenSource.Dispose();
+                try
+                {
+                    UiElementsBinding.MainWindowReference.CancelTokenSource.Cancel();
+                    UiElementsBinding.MainWindowReference.CancelTokenSource.Dispose();
+                }
+                catch (ObjectDisposedException e)
+                {
+                    Console.WriteLine(e);
+                }
+               
             }
             else
             {
-                UiElementsBinding.MainWindowReference.CancelTokenTarget.Cancel();
+                try
+                {
+                    UiElementsBinding.MainWindowReference.CancelTokenTarget.Cancel();
+                    UiElementsBinding.MainWindowReference.CancelTokenTarget.Dispose();
+                }
+                catch (ObjectDisposedException e)
+                {
+                    Console.WriteLine(e);
+                }
             }
             
             var listBox = Parent as ListBox;
