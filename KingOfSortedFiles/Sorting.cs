@@ -54,7 +54,7 @@ public class Sorting
                 
                 //determines the prescrit and passes it to the processBar
                 counter++;
-                UiElementsBinding.SortingProcessTab.StartStopAndProgress.ProgressBar.Value =
+                UiElementsBinding.SortingProcessTab.StartAndProgress.ProgressBar.Value =
                     counter / SourceDirectoryPathList.Count * 100;
             }
             
@@ -88,7 +88,7 @@ public class Sorting
             }
         }
         
-        else if ((bool)sortCheckBoxTwo!.IsChecked! && (bool)sortCheckBoxOne.IsChecked)
+        else if ((bool)sortCheckBoxTwo.IsChecked! && (bool)sortCheckBoxOne.IsChecked)
         {
             foreach (var file in allFiles)
             {
@@ -113,7 +113,7 @@ public class Sorting
             {
                 File.Move(newTargetDirectory.FullName,file.FullName);
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 var newFileName = file.Name + $"-CopyId({new Random().Next(1000,10000)})";
                 File.Move(  file.FullName,Path.Combine( newTargetDirectory.FullName,newFileName) );
@@ -124,7 +124,7 @@ public class Sorting
             {
                 File.Copy(  file.FullName,Path.Combine( newTargetDirectory.FullName,file.Name) );
             }
-            catch (IOException e)
+            catch (IOException )
             {
                 var newFileName = file.Name + $"-CopyId({new Random().Next(1000,10000)})";
                 File.Copy(  file.FullName,Path.Combine( newTargetDirectory.FullName,newFileName) );

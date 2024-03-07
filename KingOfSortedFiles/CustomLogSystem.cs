@@ -8,7 +8,7 @@ namespace KingOfSortedFiles;
 //A class to write a logfile, as well as the possibility to output logs in the Ui
 public class LogSystemSettings
 {
-    private  ListBox? _logListBox  = null!;
+    private  ListBox? _logListBox;
     private  FileInfo _logFile  = null!;
 
     //sets the listbox as LogListbox as well as the logfile

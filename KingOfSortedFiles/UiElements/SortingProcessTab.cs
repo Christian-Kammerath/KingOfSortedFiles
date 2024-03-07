@@ -8,11 +8,13 @@ using Avalonia.Media;
 namespace KingOfSortedFiles.UiElements;
 
 
+//creates an overview of the settings made
 public class SettingsShow : StackPanel
 {
+    
+    //adds the individually created elements
     public SettingsShow()
     {
-
         Orientation = Orientation.Horizontal;
             
         Children.Add(GetExtensionsListBox());
@@ -28,6 +30,7 @@ public class SettingsShow : StackPanel
         Children.Add(GetTargetDirectoryListBox());
     }
 
+    //created a ListBox with the Selected TargetDirectoryPath
     private ListBox GetTargetDirectoryListBox()
     {
         var targetDirectoryListBox = new ListBox(){Height = 200, Width = 150};
@@ -36,6 +39,8 @@ public class SettingsShow : StackPanel
 
         return targetDirectoryListBox;
     }
+
+    //created a ListBox with all Selected SourceDirectoryPath
 
     private ListBox GetSourceDirectoryListBox()
     {
@@ -51,6 +56,7 @@ public class SettingsShow : StackPanel
         return sourceDirectoryListBox;
     }
 
+    //created a ListBox with all Selected Fileextensions
     private static ListBox GetExtensionsListBox()
     {
         var extensionsList = new ListBox(){Height = 200, Width = 130};
@@ -63,8 +69,9 @@ public class SettingsShow : StackPanel
         });
 
         return extensionsList;
+        
     }
-
+    //created a ListBox with the file search settings and SearchTags
     private static ListBox GetSearchByCheckBoxList()
     {
         var searchByCheckBoxList = new ListBox(){Height = 200, Width = 150};
@@ -93,6 +100,7 @@ public class SettingsShow : StackPanel
         return searchByCheckBoxList;
     }
 
+    //created a ListBox with the settings of first first sort folders by for example created time and the same for second sort folders
     private static ListBox[] GetSortingCheckBoxesListArray()
     {
         var sortingCheckBoxList = UiElementsBinding.SortingSettings
@@ -105,6 +113,7 @@ public class SettingsShow : StackPanel
             
         sortingCheckBoxList.SortOneCheckBoxList.ForEach(f =>
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if(f!=null)
                 if ((bool)f.IsChecked!)
                     sortingCheckBoxOneListBox.Items.Add(new TextBlock() { Text = f.Tag!.ToString() });
@@ -118,6 +127,7 @@ public class SettingsShow : StackPanel
             
         sortingCheckBoxList.SortTwoCheckBoxList.ForEach(f =>
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if(f != null)
                 if ((bool)f.IsChecked!)
                     sortingCheckBoxTwoListBox.Items.Add(new TextBlock() { Text = f.Tag!.ToString() });
@@ -127,7 +137,8 @@ public class SettingsShow : StackPanel
 
     }
     
-    
+    //Get a list of all Checked FileExtensions CheckBoxen
+
     private static List<CheckBox> GetAllIsCheckedFileExtensions()
     {
         var fileExtensionList = UiElementsBinding.FileExtensionListBox?.Items.OfType<FileExtensionTab>()
@@ -144,11 +155,12 @@ public class SettingsShow : StackPanel
     
 }
 
-public class StartStopAndProgress : StackPanel
+//created a StackPanel with start button and ProgressBar
+public class StartAndProgress : StackPanel
 {
     public ProgressBar ProgressBar { get; set; }
 
-    public StartStopAndProgress()
+    public StartAndProgress()
     {
         Orientation = Orientation.Horizontal;
         
@@ -160,7 +172,7 @@ public class StartStopAndProgress : StackPanel
 
         var startButton = new Button() { Content = "Start", Background = Brushes.Green,HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center};
-        startButton.Click += (sender, args) =>
+        startButton.Click += (_, _) =>
         {
             new Sorting(UiElementsBinding.SortingSettings).StartSorting();
         };
@@ -173,9 +185,10 @@ public class StartStopAndProgress : StackPanel
     
 }
 
+//Builds the ProcessTab
 public class SortingProcessTab : StackPanel
 {
-    public StartStopAndProgress StartStopAndProgress { get; set; }
+    public StartAndProgress StartAndProgress { get; set; }
     public SortingProcessTab()
     {
         var logListBox = UiElementsBinding.LogListBox!;
@@ -187,11 +200,12 @@ public class SortingProcessTab : StackPanel
         logListBox.Items.Remove(lastSortingProcessTab);
 
         var settings = new SettingsShow();
-        StartStopAndProgress = new StartStopAndProgress();
+        StartAndProgress = new StartAndProgress();
         
         Children.Add(settings);
-        Children.Add(StartStopAndProgress);
+        Children.Add(StartAndProgress);
         UiElementsBinding.SortingProcessTab = this;
     }
     
 }
+

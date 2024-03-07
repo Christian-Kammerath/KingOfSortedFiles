@@ -1,12 +1,9 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Threading;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using KingOfSortedFiles.Views;
 
 namespace KingOfSortedFiles.UiElements;
 
@@ -55,7 +52,7 @@ public class TargetFolderTab : StackPanel
             }
             
             var listBox = Parent as ListBox;
-            new LoadElementsIntoList(FolderPath, listBox!,false);
+            _= new LoadElementsIntoList(FolderPath, listBox!,false);
         };
         
         Orientation = Orientation.Horizontal;
@@ -81,7 +78,7 @@ public class SourceFolderTab : TargetFolderTab
         var checkBoxStack = new StackPanel(){Orientation = Orientation.Horizontal};
         var selectCheckBox = new CheckBox() { Tag = FolderPath, VerticalAlignment = VerticalAlignment.Center };
 
-        selectCheckBox.IsCheckedChanged += (sender, args) =>
+        selectCheckBox.IsCheckedChanged += (_, _) =>
         {
             UiElementsBinding.SortingSettings.SourceDirectoryPathList.Add(FolderPath);
             UiElementsBinding.LogListBox!.Items.Add(new SortingProcessTab());

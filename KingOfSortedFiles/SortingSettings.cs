@@ -5,6 +5,7 @@ using KingOfSortedFiles.UiElements;
 
 namespace KingOfSortedFiles;
 
+//settings for the sorting process
 public  class SortingSettings
 {
     public  SortCheckBoxes? SortCheckBoxes { get; set; }
@@ -21,6 +22,7 @@ public  class SortingSettings
     public SearchTags SearchTagList { get; set; } = null!;
 }
 
+// loaded SearchTags from ListBox
 public class SearchTags
 {
     public List<string> SearchTagList { get; set; } = new();
@@ -31,6 +33,7 @@ public class SearchTags
     }
 }
 
+//Allows conflict-free selection of whether files should be moved or copied and moved
 public class MoveAndOrCopy
 {
     public bool MoveOnly { get; set; }
@@ -48,7 +51,7 @@ public class MoveAndOrCopy
             }
         };
         
-        copyAndMove.IsCheckedChanged += (sender, args) =>
+        copyAndMove.IsCheckedChanged += (_, _) =>
         {
             if (CopyAndMove is false)
             {
@@ -61,6 +64,7 @@ public class MoveAndOrCopy
     }
 }
 
+//allows you to choose whether files and or should be searched using searchTags or file extensions
 public class SearchByCheckBoxes
 {
     private CheckBox _fileExtensions = null!;
@@ -71,7 +75,7 @@ public class SearchByCheckBoxes
         {
             _fileExtensions = value;
 
-            _fileExtensions.IsCheckedChanged += (sender, args) =>
+            _fileExtensions.IsCheckedChanged += (_, _) =>
             {
                 UiElementsBinding.LogListBox!.Items.Add(new SortingProcessTab());
             };
@@ -86,7 +90,7 @@ public class SearchByCheckBoxes
         {
             _searchTags = value;
 
-            _searchTags.IsCheckedChanged += (sender, args) =>
+            _searchTags.IsCheckedChanged += (_, _) =>
             {
                 UiElementsBinding.LogListBox!.Items.Add(new SortingProcessTab());
             };
@@ -94,6 +98,7 @@ public class SearchByCheckBoxes
     }
 }
 
+//loads the settings checkboxes
 public  class SortCheckBoxes
 {
     public List<CheckBox> SortOneCheckBoxList { get; set; } = new();
@@ -122,6 +127,7 @@ public  class SortCheckBoxes
 
         SortOneCheckBoxList?.ForEach(c =>
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (c != null)
             {
                 c.Click += (sender, args) =>
@@ -130,6 +136,7 @@ public  class SortCheckBoxes
 
                     SortOneCheckBoxList?.ForEach(cb =>
                     {
+                        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                         if (cb != null && cb != currentCheckBox)
                             cb.IsChecked = false;
                     });
@@ -141,6 +148,7 @@ public  class SortCheckBoxes
         
         SortTwoCheckBoxList?.ForEach(c =>
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (c != null)
             {
                 c.Click += (sender, args) =>
@@ -149,6 +157,7 @@ public  class SortCheckBoxes
 
                     SortTwoCheckBoxList?.ForEach(cb =>
                     {
+                        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                         if (cb != null && cb != currentCheckBox)
                             cb.IsChecked = false;
                     });

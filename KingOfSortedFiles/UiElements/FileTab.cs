@@ -47,7 +47,7 @@ public class FileTab : StackPanel
             return Path.Combine(Directory.GetCurrentDirectory(), "Icons","FileIcons", ExtensionIconDictionary[fileExtension]);
 
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return Path.Combine(Directory.GetCurrentDirectory(), "Icons","FileIcons", "PlaceHolder.ico");
 

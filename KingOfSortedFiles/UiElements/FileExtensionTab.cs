@@ -43,7 +43,7 @@ public class FileExtensionTab : StackPanel
                     FontWeight = FontWeight.Bold,
                 };
 
-                checkBox.IsCheckedChanged += (sender, args) =>
+                checkBox.IsCheckedChanged += (_, _) =>
                 {
                     UiElementsBinding.LogListBox!.Items.Add(new SortingProcessTab());
                 };

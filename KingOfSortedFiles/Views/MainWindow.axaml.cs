@@ -9,12 +9,12 @@ namespace KingOfSortedFiles.Views;
 
 public partial class MainWindow : Window
 {
-    public CancellationTokenSource CancelTokenSource = new();
-    public CancellationTokenSource CancelTokenTarget = new();
+    public readonly CancellationTokenSource CancelTokenSource = new();
+    public readonly CancellationTokenSource CancelTokenTarget = new();
 
 
-    private Task SearchTaskSource = new(()=>{});
-    private Task SearchTaskTarget = new(()=>{});
+    private Task _searchTaskSource = new(()=>{});
+    private Task _searchTaskTarget = new(()=>{});
 
     private DirectorySearch SourceDirectorySearch { get; set; } = new();
     private DirectorySearch TargetDirectorySearch { get; set; } = new();
@@ -36,7 +36,7 @@ public partial class MainWindow : Window
         UiElementsBinding.BindUiElements(this);
         
         //Starts the start rotines
-        new ProgramStartRoutine();
+        _= new ProgramStartRoutine();
         
         
         CustomLogSystem.Debug("ProgramStartRoutine finish",false);
@@ -53,7 +53,7 @@ public partial class MainWindow : Window
         var sourceListBox = UiElementsBinding.SourceListBox;
 
         if (Directory.Exists(sourcePathBox!.Text) || string.IsNullOrEmpty(sourcePathBox.Text))
-            new LoadElementsIntoList(sourcePathBox.Text!, sourceListBox!,false);
+          _ = new LoadElementsIntoList(sourcePathBox.Text!, sourceListBox!,false);
         else
         {
             sourceListBox!.Items.Clear();
@@ -69,7 +69,7 @@ public partial class MainWindow : Window
         var targetListBox = UiElementsBinding.TargetListBox;
         
         if (Directory.Exists(targetPathBox!.Text) || string.IsNullOrEmpty(targetPathBox.Text))
-            new LoadElementsIntoList(targetPathBox.Text!, targetListBox!,false);
+           _= new LoadElementsIntoList(targetPathBox.Text!, targetListBox!,false);
         else
         {
             targetListBox!.Items.Clear();
@@ -89,7 +89,7 @@ public partial class MainWindow : Window
         {
             var listBox = UiElementsBinding.SearchTagListBox;
             listBox!.Items.Add(new SearchTagTab(searchTagString));
-            UiElementsBinding.SortingSettings.SearchTagList = new SearchTags(listBox!);
+            UiElementsBinding.SortingSettings.SearchTagList = new SearchTags(listBox);
             UiElementsBinding.LogListBox!.Items.Add(new SortingProcessTab());
         }
     }
@@ -102,7 +102,7 @@ public partial class MainWindow : Window
         {
             if (selectedItem is TargetFolderTab targetFolderTab)
             {
-                var folderTab = (TargetFolderTab)selectedItem!;
+                var folderTab = (TargetFolderTab)selectedItem;
                 UiElementsBinding.SortingSettings.TargetDirectoryPath = Path.Combine(folderTab.FolderPath);
                 UiElementsBinding.LogListBox!.Items.Add(new SortingProcessTab());
             }
@@ -137,7 +137,7 @@ public partial class MainWindow : Window
                 TargetDirectorySearch.SearchString = searchText;
 
                 //check if a search is already running, if not a new task will be started
-                if (SearchTaskTarget.Status != TaskStatus.RanToCompletion)
+                if (_searchTaskTarget.Status != TaskStatus.RanToCompletion)
                 {
                     var listBox = UiElementsBinding.TargetListBox!;
                     listBox.Items.Clear();
@@ -145,13 +145,15 @@ public partial class MainWindow : Window
                     CustomLogSystem.Informational($"Directory search running: {listBox.Name}",true);
 
                     var token = CancelTokenTarget.Token;
-                    
-                    SearchTaskTarget = new Task(async () =>
+
+                    async void Action()
                     {
-                        await TargetDirectorySearch.ReadFolder(curedTargetPath,false,listBox,token);
-                    },CancelTokenTarget.Token);
+                        await TargetDirectorySearch.ReadFolder(curedTargetPath, false, listBox, token);
+                    }
+
+                    _searchTaskTarget = new Task(Action,CancelTokenTarget.Token);
                     
-                    SearchTaskTarget.Start();
+                    _searchTaskTarget.Start();
                 }
            
             }
@@ -159,7 +161,7 @@ public partial class MainWindow : Window
             else
             {
                 UiElementsBinding.TargetListBox!.Items.Clear();
-                new LoadElementsIntoList(curedTargetPath, UiElementsBinding.TargetListBox,false);
+                _=new LoadElementsIntoList(curedTargetPath, UiElementsBinding.TargetListBox,false);
 
             }
             
@@ -188,7 +190,7 @@ public partial class MainWindow : Window
                 SourceDirectorySearch.SearchString = searchText;
 
                 //check if a search is already running, if not a new task will be started
-                if (SearchTaskSource.Status != TaskStatus.RanToCompletion)
+                if (_searchTaskSource.Status != TaskStatus.RanToCompletion)
                 {
                     var listBox = UiElementsBinding.SourceListBox!;
                     listBox.Items.Clear();
@@ -196,21 +198,22 @@ public partial class MainWindow : Window
                     var token = CancelTokenSource.Token;
                     
                     CustomLogSystem.Informational($"Directory search running: {listBox.Name}",true);
-                    
-                    SearchTaskSource = new Task(async () =>
+
+                    async void Action()
                     {
-                        await SourceDirectorySearch.ReadFolder(curedSourcePath,true,listBox,token);
-                    },CancelTokenSource.Token);
+                        await SourceDirectorySearch.ReadFolder(curedSourcePath, true, listBox, token);
+                    }
+
+                    _searchTaskSource = new Task(Action,CancelTokenSource.Token);
                     
-                    SearchTaskSource.Start();
+                    _searchTaskSource.Start();
                 }
                 
             }
             else
             {
                 UiElementsBinding.SourceListBox?.Items.Clear();
-                new LoadElementsIntoList(curedSourcePath, UiElementsBinding.SourceListBox!,false);
-
+                _ = new LoadElementsIntoList(curedSourcePath, UiElementsBinding.SourceListBox!, false);
             }    
             
         }    

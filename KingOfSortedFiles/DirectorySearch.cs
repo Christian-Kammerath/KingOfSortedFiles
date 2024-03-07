@@ -14,8 +14,8 @@ namespace KingOfSortedFiles;
 //classe for searching and outputting directories
 public  class DirectorySearch
 {
-    public  string SearchString { get; set; }
-    private  bool SearchIsRunning = true;
+    public  string SearchString { get; set; } = null!;
+    private  bool _searchIsRunning = true;
 
     public  async Task ReadFolder(string path, bool isSource, ListBox listBox, CancellationToken token)
     {
@@ -24,12 +24,12 @@ public  class DirectorySearch
             //checks whether the task has received an abort command
             if (token.IsCancellationRequested)
             {
-                if (SearchIsRunning)
+                if (_searchIsRunning)
                 {
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         CustomLogSystem.Informational($"Directory search ended: {listBox.Name}", true);
-                        SearchIsRunning = false;
+                        _searchIsRunning = false;
                     });
                     
                 }
@@ -68,7 +68,7 @@ public  class DirectorySearch
                 
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
             //Deletes all old results from the listbox that no longer match the searchString
             await CleanListAsync(listBox,isSource);

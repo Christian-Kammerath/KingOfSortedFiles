@@ -24,7 +24,7 @@ public static class OpensSettingsFile
         var textBox = SettingWindow.Find<TextBox>("TextBox");
         textBox!.Text = SettingsString;
 
-        textBox.TextChanged += (sender, args) =>
+        textBox.TextChanged += (_, _) =>
         {
             SettingsString = textBox.Text;
         };
@@ -41,6 +41,6 @@ public static class OpensSettingsFile
             streamWriter.Write(SettingsString);
         }
         SettingWindow!.Close();
-       new ProgramStartRoutine();
+       _ = new ProgramStartRoutine();
     }
 }
